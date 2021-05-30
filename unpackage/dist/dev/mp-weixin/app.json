@@ -1,0 +1,35 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/login/regist",
+    "pages/index/index",
+    "pages/map/add",
+    "pages/relea/postion",
+    "pages/relea/car_list",
+    "pages/relea/monitoring",
+    "pages/relea/find_food",
+    "pages/relea/add_crt",
+    "pages/relea/find_work",
+    "pages/relea/find_car",
+    "pages/center/rz",
+    "pages/shop/index",
+    "pages/order/index",
+    "pages/shop/goods_info"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarBackgroundColor": "#0081ff",
+    "navigationBarTitleText": "车管家",
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "white"
+  },
+  "usingComponents": {
+    "home": "/pages/map/index",
+    "dw": "/pages/order/index",
+    "order": "/pages/order/all_list",
+    "fx": "/pages/relea/index",
+    "sc": "/pages/shop/index",
+    "center": "/pages/center/index",
+    "cu-custom": "/colorui/components/cu-custom"
+  }
+}

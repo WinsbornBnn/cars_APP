@@ -1,0 +1,79 @@
+{
+	"pages": [
+		//pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/login/login",
+			"style": {}
+		},
+		{
+			"path": "pages/login/regist",
+			"style": {}
+		},
+		{
+			"path": "pages/index/index",
+			"style": {}
+		},
+		{
+			"path": "pages/map/add",
+			"style": {}
+		},
+		{
+			"path": "pages/relea/postion",
+			"style": {}
+		},
+		{
+			"path": "pages/relea/car_list",
+			"style": {}
+		},
+		{
+			"path": "pages/relea/monitoring",
+			"style": {}
+		},
+		{
+			"path": "pages/relea/find_food",
+			"style": {}
+		},
+		{
+			"path": "pages/relea/add_crt",
+			"style": {}
+		},
+		{
+			"path": "pages/relea/find_work",
+			"style": {}
+		},
+		{
+			"path": "pages/relea/find_car",
+			"style": {}
+		},
+		{
+			"path": "pages/center/rz",
+			"style": {}
+		},
+		{
+			"path":"pages/shop/index",
+			"style":{
+				"onReachBottomDistance":50
+			}
+		},
+		{
+			"path": "pages/order/index",
+			"style": {}
+		},
+		{
+			"path": "pages/shop/goods_info",
+			"style": {}
+		}
+	],
+	"globalStyle": {
+		"mp-alipay": {
+			/* 支付宝小程序特有相关 */
+			"transparentTitle": "always",
+			"allowsBounceVertical": "NO"
+		},
+		"navigationBarBackgroundColor": "#0081ff",
+		"navigationBarTitleText": "车管家",
+		"navigationStyle": "custom",
+		"navigationBarTextStyle": "white"
+	},
+	"usingComponts": true
+}
