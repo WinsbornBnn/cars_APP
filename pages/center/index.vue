@@ -17,6 +17,12 @@
 						<text class="text-grey">我的车辆</text>
 					</view>
 				</view>
+        <view class="cu-item arrow">
+					<view class="content" @click="myLike">
+						<image src="../../static/drawable-xhdpi/shoucang.png" class="png" mode="aspectFit"></image>
+						<text class="text-grey">我的收藏</text>
+					</view>
+				</view>
 				<view class="cu-item arrow">
 					<view class="content">
 						<image src="../../static/drawable-xhdpi/wode_icon3.png" class="png" mode="aspectFit"></image>
@@ -65,6 +71,11 @@
 					url: '/pages/center/rz'
 				});
 			},
+      myLike(){
+        uni.navigateTo({
+					url: '/pages/center/my-like'
+				});
+      },
 			goLogin() {
 				uni.showModal({
 					title: '提示',
@@ -72,8 +83,9 @@
 					success: function(res) {
 						if (res.confirm) {
 							setTimeout(() => {
-								util.removeToken()
-								util.removeUserData()
+								// util.removeToken()
+								// util.removeUserData()
+								uni.clearStorage()
 								uni.navigateTo({
 									url: '../login/login'
 								})

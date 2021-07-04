@@ -1,27 +1,79 @@
 {
   "pages": [
     "pages/login/login",
-    "pages/login/regist",
+    "pages/login/register",
+    "pages/login/verify",
     "pages/index/index",
-    "pages/map/add",
+    "pages/map/index",
+    "pages/index/add",
+    "pages/relea/index",
+    "pages/index/priverIndex",
     "pages/relea/postion",
     "pages/relea/car_list",
     "pages/relea/monitoring",
     "pages/relea/find_food",
     "pages/relea/add_crt",
+    "pages/relea/add_job",
+    "pages/relea/detail",
     "pages/relea/find_work",
     "pages/relea/find_car",
+    "pages/center/index",
     "pages/center/rz",
     "pages/shop/index",
     "pages/order/index",
-    "pages/shop/goods_info"
+    "pages/shop/goods_info",
+    "pages/order/detail",
+    "pages/order/all_list",
+    "pages/order/order_list"
   ],
   "subPackages": [],
   "window": {
     "navigationBarBackgroundColor": "#0081ff",
     "navigationBarTitleText": "车管家",
     "navigationStyle": "custom",
-    "navigationBarTextStyle": "white"
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#fbf9fe"
+  },
+  "tabBar": {
+    "color": "#adadad",
+    "selectedColor": "#275c9f",
+    "backgroundColor": "#fff",
+    "borderStyle": "black",
+    "custom": true,
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "static/drawable-xxhdpi/home.png",
+        "selectedIconPath": "static/drawable-xxhdpi/home_cur.png"
+      },
+      {
+        "pagePath": "pages/order/index",
+        "text": "订单",
+        "iconPath": "static/drawable-xxhdpi/dw.png",
+        "selectedIconPath": "static/drawable-xxhdpi/dw_cur.png"
+      },
+      {
+        "pagePath": "pages/relea/index",
+        "text": "发现",
+        "iconWidth": "40px",
+        "height": "80px",
+        "iconPath": "static/drawable-xxhdpi/fx.png",
+        "selectedIconPath": "static/drawable-xxhdpi/fx_cur.png"
+      },
+      {
+        "pagePath": "pages/shop/index",
+        "text": "商场",
+        "iconPath": "static/drawable-xxhdpi/sc.png",
+        "selectedIconPath": "static/drawable-xxhdpi/sc_cur.png"
+      },
+      {
+        "pagePath": "pages/center/index",
+        "text": "我的",
+        "iconPath": "static/drawable-xxhdpi/center.png",
+        "selectedIconPath": "static/drawable-xxhdpi/center_cur.png"
+      }
+    ]
   },
   "usingComponents": {
     "home": "/pages/map/index",

@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "uni-dateformat": "/components/uni-dateformat/uni-dateformat"
+  }
+}

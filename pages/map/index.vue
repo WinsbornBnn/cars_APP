@@ -1,77 +1,103 @@
-<template name="home">
-	<view>
-		<cu-custom bgColor="bg-blue-one" isR="true">
-			<block slot="content">首页</block>
-		</cu-custom>
-		<view class="page-body">
-			<view class="page-section page-section-gap">
-				<map id="index_maps" style="width: 100%; height: 60vh;" :latitude="latitude" :longitude="longitude" :markers="covers">
-				</map>
-				<view style="/*height: 40vh;*/">
-					<view class="padding-lr bg-white ">
-						<!-- <view class="padding solid-bottom">当前订单：</view> -->
-						<view class="padding " @click="getlocal()">目的地：</view>
-						<view class="padding solid-bottom">当前位置：{{address}}</view>
-						
-					</view>
-				</view>
-			</view>
-		</view>
-	</view>
+<template>
+  <view>
+    <home v-if="PageCur == 'home'"></home>
+    <dw v-if="PageCur == 'dw'"></dw>
+    <fx v-if="PageCur == 'fx'"></fx>
+    <sc v-if="PageCur == 'sc'"></sc>
+    <center v-if="PageCur == 'center'"></center>
+    <order v-if="PageCur == 'order'"></order>
+
+    <view class="cu-bar tabbar bg-white shadow foot">
+      <view class="action" @click="NavChange" data-cur="home">
+        <view class="cuIcon-cu-image">
+          <image
+            :src="
+              '/static/drawable-xxhdpi/home' +
+              [PageCur == 'home' ? '_cur' : ''] +
+              '.png'
+            "
+          ></image>
+        </view>
+        <view :class="PageCur == 'home' ? 'text-sel' : 'text-df'">首页</view>
+      </view>
+      <view class="action" @click="NavChange" data-cur="dw">
+        <view class="cuIcon-cu-image">
+          <image
+            :src="
+              '/static/drawable-xxhdpi/dw' +
+              [PageCur == 'dw' ? '_cur' : ''] +
+              '.png'
+            "
+          ></image>
+        </view>
+        <view :class="PageCur == 'dw' ? 'text-sel' : 'text-df'">订单</view>
+      </view>
+      <view class="action add-action" @click="NavChange" data-cur="fx">
+        <view class="cuIcon-cu-image">
+          <image
+            :src="
+              '/static/drawable-xxhdpi/fx' +
+              [PageCur == 'fx' ? '_cur' : ''] +
+              '.png'
+            "
+          ></image>
+        </view>
+        <view :class="PageCur == 'fx' ? 'text-sel' : 'text-df'">发布</view>
+      </view>
+      <view class="action" @click="NavChange" data-cur="sc">
+        <view class="cuIcon-cu-image">
+          <image
+            :src="
+              '/static/drawable-xxhdpi/sc' +
+              [PageCur == 'sc' ? '_cur' : ''] +
+              '.png'
+            "
+          ></image>
+        </view>
+        <view :class="PageCur == 'sc' ? 'text-sel' : 'text-df'">商场</view>
+      </view>
+      <view class="action" @click="NavChange" data-cur="center">
+        <view class="cuIcon-cu-image">
+          <image
+            :src="
+              '/static/drawable-xxhdpi/center' +
+              [PageCur == 'center' ? '_cur' : ''] +
+              '.png'
+            "
+          ></image>
+        </view>
+        <view :class="PageCur == 'center' ? 'text-sel' : 'text-df'">我的</view>
+      </view>
+    </view>
+  </view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-				title: 'map',
-				latitude: '',
-				longitude: '',
-				address:'',
-				covers: [{
-					latitude: 39.909,
-					longitude: 116.39742,
-					iconPath: '../../../static/location.png'
-				}, {
-					latitude: 39.90,
-					longitude: 116.39,
-					iconPath: '../../../static/location.png'
-				}]
-			}
-		},
-		onReady() {
-			//调用的函数放到onReady里面
-			this.getlocal();
-		},
-		onLoad() {
-			this.getlocal();
-		},
-		onShow() {
-			this.getlocal();
-		},
-		methods: {
-			getlocal: function() {
-				let _this = this;
-				//显示当前位置
-				var map = uni.createMapContext('index_maps', this).$getAppMap();
-				map.showUserLocation(true);
-				//获取当前定位
-				uni.getLocation({
-					type: 'wgs84',
-					geocode:true, 
-					success: function(res) {
-						_this.address = res.address.poiName;
-						_this.longitude = res.longitude;
-						_this.latitude = res.latitude;
-					}
-				})
-			}
-		}
-	}
+export default {
+  data () {
+    return {
+      PageCur: 'home'
+    }
+  },
+  onLoad () {
+
+  },
+  onShow () {
+  },
+  methods: {
+    // NavChange: function (e) {
+    //   this.PageCur = e.currentTarget.dataset.cur
+    // }
+  }
+}
 </script>
 
 <style>
-	.page {
-		height: 100vh;
-	}
+.text-sel {
+  color: #275c9f;
+}
+
+.text-df {
+  color: #000000;
+}
 </style>

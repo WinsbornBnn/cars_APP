@@ -1,102 +1,121 @@
 {
-    "name" : "车管家",
-    "appid" : "__UNI__F5C68EE",
-    "description" : "货车定位管理专家",
-    "versionName" : "V0.0.1",
-    "versionCode" : 214,
-    "transformPx" : false,
-    "app-plus" : {
-        /* 5+App特有相关 */
-        "modules" : {},
-		"devServer" : {
-			"port":8000,
-			"disableHostCheck":true,
-		    "proxy": {
-		        "/ksy": {
-		            "target": "http://192.168.2.112:8082/cvas/",
-					"changeOrigin":true,
-					"ws":true,
-		            "pathRewrite": {
-		                "^/ksy": ""
-		            }
-		        }
-		    }
+	"name": "车管家",
+	"appid": "__UNI__F5C68EE",
+	"description": "货车定位管理专家",
+	"versionName": "V0.0.1",
+	"versionCode": 214,
+	"transformPx": false,
+	"app-plus": {
+		/* 5+App特有相关 */
+		"modules": {},
+		"devServer": {
+			"port": 8080,
+			"disableHostCheck": true,
+			"proxy": {
+				"/api": {
+					"target": "http://192.168.2.8:8088/cvas",
+					"changeOrigin": true,
+					"secure": false,
+					"pathRewrite": {
+						"^/api": ""
+					}
+				}
+			}
 		},
-        /* 模块配置 */
-        "distribute" : {
-            /* 应用发布信息 */
-            "android" : {
-                /* android打包配置 */
-                "permissions" : [
-                    "<uses-feature android:name=\"android.hardware.camera\"/>",
-                    "<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
-                    "<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
-                    "<uses-permission android:name=\"android.permission.CAMERA\"/>",
-                    "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
-                    "<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
-                    "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
-                    "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
-                    "<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>",
-                    "<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>",
-                    "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
-                    "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
-                    "<uses-permission android:name=\"android.permission.WRITE_CONTACTS\"/>"
-                ]
-            },
-            "ios" : {},
-            /* ios打包配置 */
-            "sdkConfigs" : {
-                "maps" : {
-                    "amap" : {
-                        "appkey_ios" : "",
-                        "appkey_android" : ""
-                    }
-                }
-            },
-            "icons" : {
-                "android" : {
-                    "hdpi" : "static/Android_logo/72.png",
-                    "xhdpi" : "static/Android_logo/96.png",
-                    "xxhdpi" : "static/Android_logo/144.png",
-                    "xxxhdpi" : "static/Android_logo/192.png"
-                },
-                "ios" : {
-                    "iphone" : {
-                        "app@2x" : "static/iPhone_logo/120.png",
-                        "notification@2x" : "static/iPhone_logo/40@2x.png",
-                        "notification@3x" : "static/iPhone_logo/60@2x.png",
-                        "settings@3x" : "static/iPhone_logo/87@2x.png",
-                        "settings@2x" : "static/iPhone_logo/120.png",
-                        "spotlight@3x" : "static/iPhone_logo/180.png",
-                        "spotlight@2x" : "static/iPhone_logo/80.png",
-                        "app@3x" : "static/iPhone_logo/180.png"
-                    }
-                }
-            },
-            "splashscreen" : {
-                "androidStyle" : "default",
-                "iosStyle" : "common",
-                "android" : {
-                    "hdpi" : "static/loading.png",
-                    "xhdpi" : "static/loading.png",
-                    "xxhdpi" : "static/loading.png"
-                }
-            }
-        }
-    },
-    /* SDK配置 */
-    "quickapp" : {},
-    /* 快应用特有相关 */
-    "mp-weixin" : {
-        /* 小程序特有相关 */
-        "appid" : "",
-        "setting" : {
-            "urlCheck" : false,
-            "es6" : true
-        }
-    },
-    "h5" : {
-        "title" : "ColorUi for UniApp",
-        "domain" : "demo.color-ui.com"
-    }
+		/* 模块配置 */
+		"distribute": {
+			/* 应用发布信息 */
+			"android": {
+				/* android打包配置 */
+				"permissions": [
+					"<uses-feature android:name=\"android.hardware.camera\"/>",
+					"<uses-feature android:name=\"android.hardware.camera.autofocus\"/>",
+					"<uses-permission android:name=\"android.permission.CALL_PHONE\"/>",
+					"<uses-permission android:name=\"android.permission.CAMERA\"/>",
+					"<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>",
+					"<uses-permission android:name=\"android.permission.FLASHLIGHT\"/>",
+					"<uses-permission android:name=\"android.permission.GET_ACCOUNTS\"/>",
+					"<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
+					"<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>",
+					"<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>",
+					"<uses-permission android:name=\"android.permission.VIBRATE\"/>",
+					"<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
+					"<uses-permission android:name=\"android.permission.WRITE_CONTACTS\"/>"
+				]
+			},
+			"ios": {},
+			/* ios打包配置 */
+			"sdkConfigs": {
+				"maps": {
+					"amap": {
+						"appkey_ios": "",
+						"appkey_android": ""
+					}
+				}
+			},
+			"icons": {
+				"android": {
+					"hdpi": "static/Android_logo/72.png",
+					"xhdpi": "static/Android_logo/96.png",
+					"xxhdpi": "static/Android_logo/144.png",
+					"xxxhdpi": "static/Android_logo/192.png"
+				},
+				"ios": {
+					"iphone": {
+						"app@2x": "static/iPhone_logo/120.png",
+						"notification@2x": "static/iPhone_logo/40@2x.png",
+						"notification@3x": "static/iPhone_logo/60@2x.png",
+						"settings@3x": "static/iPhone_logo/87@2x.png",
+						"settings@2x": "static/iPhone_logo/120.png",
+						"spotlight@3x": "static/iPhone_logo/180.png",
+						"spotlight@2x": "static/iPhone_logo/80.png",
+						"app@3x": "static/iPhone_logo/180.png"
+					}
+				}
+			},
+			"splashscreen": {
+				"androidStyle": "default",
+				"iosStyle": "common",
+				"android": {
+					"hdpi": "static/loading.png",
+					"xhdpi": "static/loading.png",
+					"xxhdpi": "static/loading.png"
+				}
+			}
+		}
+	},
+	/* SDK配置 */
+	"quickapp": {},
+	/* 快应用特有相关 */
+	"mp-weixin": {
+		/* 小程序特有相关 */
+		"appid": "",
+		"setting": {
+			"urlCheck": false,
+			"es6": true
+		}
+	},
+	"h5": {
+		"title": "ColorUi for UniApp",
+		"domain": "demo.color-ui.com",
+		"devServer": {
+			"port": 8080,
+			"disableHostCheck": true,
+			"proxy": {
+				"/api": {
+					"target": "https://aip.baidubce.com",
+					"changeOrigin": true,
+					"secure": false,
+					"pathRewrite": {
+						"^/api": ""
+					}
+				}
+			}
+		},
+		"optimization": {
+			"treeShaking": {
+				"enable": false
+			}
+		}
+	}
 }

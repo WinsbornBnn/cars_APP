@@ -105,11 +105,11 @@
 /******/
 /******/
 /******/ 		// mini-css-extract-plugin CSS loading
-/******/ 		var cssChunks = {"pages/component/home":1,"pages/map/index":1,"pages/plugin/home":1};
+/******/ 		var cssChunks = {"components/uni-badge/uni-badge":1,"components/uni-load-more/uni-load-more":1,"components/uni-collapse-item/uni-collapse-item":1,"components/uni-collapse/uni-collapse":1,"components/uni-datetime-picker/uni-datetime-picker":1,"pages/relea/component/detail-list":1,"pages/relea/component/user-chart-bottom":1,"components/uni-icons/uni-icons":1};
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "" + ({"colorui/components/cu-custom":"colorui/components/cu-custom","pages/component/home":"pages/component/home","pages/map/index":"pages/map/index","pages/plugin/home":"pages/plugin/home"}[chunkId]||chunkId) + ".wxss";
+/******/ 				var href = "" + ({"colorui/components/cu-custom":"colorui/components/cu-custom","components/uni-badge/uni-badge":"components/uni-badge/uni-badge","components/uni-load-more/uni-load-more":"components/uni-load-more/uni-load-more","components/uni-collapse-item/uni-collapse-item":"components/uni-collapse-item/uni-collapse-item","components/uni-collapse/uni-collapse":"components/uni-collapse/uni-collapse","components/uni-datetime-picker/uni-datetime-picker":"components/uni-datetime-picker/uni-datetime-picker","pages/relea/component/detail-list":"pages/relea/component/detail-list","components/uni-dateformat/uni-dateformat":"components/uni-dateformat/uni-dateformat","pages/relea/component/user-chart-bottom":"pages/relea/component/user-chart-bottom","components/uni-icons/uni-icons":"components/uni-icons/uni-icons"}[chunkId]||chunkId) + ".wxss";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {

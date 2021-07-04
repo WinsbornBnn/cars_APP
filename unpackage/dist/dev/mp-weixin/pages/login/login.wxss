@@ -1,3 +1,37 @@
+.nav {
+  width: 88%;
+  height: 680rpx;
+  background-color: #ffffff;
+  margin: 0 auto;
+  margin-top: 40rpx;
+  border-radius: 10px;
+  padding-top: 10px;
+  position: relative;
+}
+.verify {
+  position: absolute;
+  right: 20rpx;
+  bottom: 20rpx;
+  color: #000;
+  font-size: 32rpx;
+}
+.center {
+  width: 40%;
+  padding-bottom: 20rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  border-bottom: 1rpx solid #c6c5ca;
+}
+.center image {
+  width: 30rpx;
+  height: 20rpx;
+  margin-top: 10rpx;
+  color: #000000;
+}
 /* 背景图设置 */
 page {
   width: 100%;
@@ -5,6 +39,14 @@ page {
   background-image: url(/static/yx-login/bg.png);
   background-repeat: no-repeat;
   background-size: 100% 100%;
+}
+uni-radio .wx-radio-input,
+uni-checkbox .wx-checkbox-input,
+uni-radio .uni-radio-input,
+uni-checkbox .uni-checkbox-input {
+  margin: 0;
+  width: 36rpx;
+  height: 36rpx;
 }
 .title {
   text-align: justify;
@@ -30,12 +72,12 @@ picker .picker {
   overflow: hidden;
   width: 100%;
   text-align: left;
-  color: #C6C5CA;
+  color: #c6c5ca;
 }
 picker::after {
   font-family: cuIcon;
   display: block;
-  content: "\e6a3";
+  content: '\e6a3';
   position: absolute;
   font-size: 34rpx;
   color: #8799a3;
@@ -62,7 +104,7 @@ picker::after {
 .login-input {
   width: 85%;
   margin: 0px auto;
-  border-bottom: 1px solid #C6C5CA;
+  border-bottom: 1px solid #c6c5ca;
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -71,7 +113,7 @@ picker::after {
   width: 91%;
   border: none;
   height: 40px;
-  color: #C6C5CA;
+  color: #c6c5ca;
   padding-left: 15px;
   padding-right: 15px;
   font-size: 14px;

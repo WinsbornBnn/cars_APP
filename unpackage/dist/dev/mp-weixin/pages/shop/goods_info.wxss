@@ -1,0 +1,72 @@
+.page.data-v-825ac572 {
+  background-color: #aaaaaa;
+}
+.marginright.data-v-825ac572 {
+  margin-right: 5px;
+  font-weight: 700;
+}
+.allAnswer.data-v-825ac572 {
+  border-bottom: 1rpx #ccc solid;
+  padding-left: 13px;
+  line-height: 50px;
+  height: 50px;
+}
+.margin-top-xl.data-v-825ac572 {
+  margin-top: 0 !important;
+}
+.u-f.data-v-825ac572 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+}
+.left.data-v-825ac572 {
+  width: 20%;
+}
+.avatar.data-v-825ac572 {
+  width: 80rpx;
+  height: 80rpx;
+  margin: 13px !important;
+  border-radius: 5px;
+}
+.right.data-v-825ac572 {
+  width: 80%;
+}
+.cu-card .grid.grid-square.data-v-825ac572 {
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+.user-chat-bottom.data-v-825ac572 {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100rpx;
+  padding: 0 20rpx;
+  background-color: #fff;
+}
+.user-chat-bottom input.data-v-825ac572 {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
+  margin-right: 20rpx;
+  background-color: #E8EDF1;
+  padding: 10rpx 20rpx;
+  border-radius: 10rpx;
+  height: 80rpx;
+  border-radius: 50px;
+  color: #979797;
+}
+.user-chat-bottom view.data-v-825ac572 {
+  width: 80rpx;
+  font-size: 50rpx;
+}
+.user-chat-bottom button.data-v-825ac572 {
+  background-color: #2C65A8;
+  height: 40px;
+  border-radius: 10px;
+  color: #fff;
+}
+

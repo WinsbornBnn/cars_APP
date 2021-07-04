@@ -1,0 +1,45 @@
+.margin-top-xl.data-v-74c97024 {
+  margin-top: 0 !important;
+}
+.u-f.data-v-74c97024 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+}
+.left.data-v-74c97024 {
+  width: 20%;
+}
+.cu-avatar.data-v-74c97024 {
+  margin: 13px !important;
+}
+.right.data-v-74c97024 {
+  width: 80%;
+}
+.cu-card .grid.grid-square.data-v-74c97024 {
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+.padding-lr.data-v-74c97024,
+.padding.data-v-74c97024 {
+  padding-left: 0;
+}
+.like.data-v-74c97024 {
+  color: #f00;
+}
+.allAnswer.data-v-74c97024 {
+  border-bottom: 1rpx #ccc solid;
+  padding-left: 13px;
+  line-height: 50px;
+  height: 50px;
+}
+.uni-body.data-v-74c97024 {
+  position: relative;
+  background-color: #fff !important;
+}
+.padding.data-v-74c97024 {
+  padding-left: 0;
+}
+

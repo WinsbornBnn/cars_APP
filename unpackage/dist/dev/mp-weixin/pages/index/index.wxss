@@ -1,8 +1,5 @@
 
-.text-sel{
-	color: #275C9F;
-}
-.text-df{
-	color: #000000;
+.page {
+  height: 100vh;
 }
 

@@ -1,0 +1,14 @@
+
+.shadow {
+  box-shadow: 0 0 8rpx 4rpx rgb(26 26 26 / 20%);
+  color: #000;
+  font-weight: 700;
+}
+#shadow {
+  padding: 30rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  font-size: 30rpx;
+}
+

@@ -24,7 +24,6 @@ Vue.component('cu-custom', cuCustom)
 
 import util from '@/common/util.js'
 Vue.prototype.$util = util
-// console.log(Vue.prototype.$util.removeToken)
 
 Vue.config.productionTip = false
 

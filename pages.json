@@ -6,7 +6,11 @@
 			"style": {}
 		},
 		{
-			"path": "pages/login/regist",
+			"path": "pages/login/register",
+			"style": {}
+		},
+		{
+			"path": "pages/login/verify",
 			"style": {}
 		},
 		{
@@ -14,7 +18,19 @@
 			"style": {}
 		},
 		{
-			"path": "pages/map/add",
+			"path": "pages/map/index",
+			"style": {}
+		},
+		{
+			"path": "pages/index/add",
+			"style": {}
+		},
+		{
+			"path": "pages/relea/index",
+			"style": {}
+		},
+		{
+			"path": "pages/index/priverIndex",
 			"style": {}
 		},
 		{
@@ -23,7 +39,10 @@
 		},
 		{
 			"path": "pages/relea/car_list",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50
+			}
 		},
 		{
 			"path": "pages/relea/monitoring",
@@ -31,18 +50,41 @@
 		},
 		{
 			"path": "pages/relea/find_food",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh": true, //开启下拉刷新
+				"onReachBottomDistance": 50
+			}
 		},
 		{
 			"path": "pages/relea/add_crt",
 			"style": {}
 		},
 		{
-			"path": "pages/relea/find_work",
+			"path": "pages/relea/add_job",
 			"style": {}
 		},
 		{
+			"path": "pages/relea/detail",
+			"style": {
+				"onReachBottomDistance": 50
+			}
+		},
+		{
+			"path": "pages/relea/find_work",
+			"style": {
+				"enablePullDownRefresh": true, //开启下拉刷新
+				"onReachBottomDistance": 50 //触发上拉触底
+			}
+		},
+		{
 			"path": "pages/relea/find_car",
+			"style": {
+				"enablePullDownRefresh": true, //开启下拉刷新
+				"onReachBottomDistance": 50
+			}
+		},
+		{
+			"path": "pages/center/index",
 			"style": {}
 		},
 		{
@@ -50,17 +92,40 @@
 			"style": {}
 		},
 		{
-			"path":"pages/shop/index",
-			"style":{
-				"onReachBottomDistance":50
+			"path": "pages/center/my-like",
+			"style": {
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50
+			}
+		},
+		{
+			"path": "pages/shop/index",
+			"style": {
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50
 			}
 		},
 		{
 			"path": "pages/order/index",
-			"style": {}
+			"style": {
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50
+			}
 		},
 		{
 			"path": "pages/shop/goods_info",
+			"style": {}
+		},
+		{
+			"path": "pages/order/detail",
+			"style": {}
+		},
+		{
+			"path": "pages/order/all_list",
+			"style": {}
+		},
+		{
+			"path": "pages/order/order_list",
 			"style": {}
 		}
 	],
@@ -73,7 +138,48 @@
 		"navigationBarBackgroundColor": "#0081ff",
 		"navigationBarTitleText": "车管家",
 		"navigationStyle": "custom",
-		"navigationBarTextStyle": "white"
+		"navigationBarTextStyle": "white",
+		"backgroundColor": "#fbf9fe"
 	},
-	"usingComponts": true
+	"usingComponts": true,
+	"tabBar": {
+		"color": "#adadad",
+		"selectedColor": "#275c9f",
+		"backgroundColor": "#fff",
+		"borderStyle": "black",
+		"custom": true,
+		"list": [{
+				"pagePath": "pages/index/index",
+				"text": "首页",
+				"iconPath": "static/drawable-xxhdpi/home.png",
+				"selectedIconPath": "static/drawable-xxhdpi/home_cur.png"
+			},
+			{
+				"pagePath": "pages/order/index",
+				"text": "订单",
+				"iconPath": "static/drawable-xxhdpi/dw.png",
+				"selectedIconPath": "static/drawable-xxhdpi/dw_cur.png"
+			},
+			{
+				"pagePath": "pages/relea/index",
+				"text": "发现",
+				"iconWidth": "40px",
+				"height": "80px",
+				"iconPath": "static/drawable-xxhdpi/fx.png",
+				"selectedIconPath": "static/drawable-xxhdpi/fx_cur.png"
+			},
+			{
+				"pagePath": "pages/shop/index",
+				"text": "商场",
+				"iconPath": "static/drawable-xxhdpi/sc.png",
+				"selectedIconPath": "static/drawable-xxhdpi/sc_cur.png"
+			},
+			{
+				"pagePath": "pages/center/index",
+				"text": "我的",
+				"iconPath": "static/drawable-xxhdpi/center.png",
+				"selectedIconPath": "static/drawable-xxhdpi/center_cur.png"
+			}
+		]
+	}
 }
