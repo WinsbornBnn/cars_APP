@@ -11,7 +11,7 @@
 				<view>
 					<view class="login-input">
 						<image src="../../static/drawable-xxhdpi/phone.png"></image>
-						<input type="text" placeholder="手机号码" v-model="From.UserName"
+						<input type="number" maxlength="11" placeholder="手机号码" v-model="From.UserName"
 							placeholder-style="color:#C6C5CA" />
 					</view>
 				</view>
@@ -70,7 +70,7 @@
 				if (that.From.UserName && that.From.PassWord) {
 					if (that.From.UserName == "admin" && that.From.PassWord == "123") {
 						/* 验证成功跳转目标页面 */
-						uni.navigateTo({
+						uni.reLaunch({
 							url: '/pages/index/index'
 						});
 					} else {

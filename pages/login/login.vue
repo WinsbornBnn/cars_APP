@@ -30,16 +30,16 @@
 				<view>
 					<view class="login-input">
 						<image src="../../static/yx-login/user.png"></image>
-						<input type="text" placeholder="请输入车牌/账号" v-model="From.UserName"
+						<input type="number" placeholder="请输入账号" maxlength="11" v-model="From.UserName"
 							placeholder-style="color:#C6C5CA" />
 					</view>
 				</view>
 				<view>
 					<view class="login-input">
 						<image src="../../static/yx-login/password.png"></image>
-						<input type="password" placeholder="请输入密码" v-model="From.PassWord"
+						<input type="password" placeholder="请输入密码" maxlength="16" v-model="From.PassWord"
 							placeholder-style="color:#C6C5CA" v-if="SwiTch" />
-						<input type="text" placeholder="请输入密码" placeholder-style="color:#C6C5CA" v-model="From.PassWord"
+						<input type="text" placeholder="请输入密码" maxlength="16" placeholder-style="color:#C6C5CA" v-model="From.PassWord"
 							v-else />
 						<image src="../../static/yx-login/b_yanjing.png" class="switch" @click="Switch()" v-if="SwiTch">
 						</image>
@@ -75,14 +75,17 @@ export default {
     return {
       driverName: '司机',
       childName: '服务器1',
+      carnoList: '',
       childList: [],
       multiIndex: [0, 0],
       From: {
         UserName: '', //账号
-        PassWord: '123456', //密码
+        PassWord: '', //密码
       },
       checked: false, //单选框
-      SwiTch: true
+      SwiTch: true,
+      serverList: [],
+      carnoList: []
     }
   },
   // 读取本地存储密码及账号
@@ -105,45 +108,64 @@ export default {
         success: (res) => {
           this.driverName = itemList[res.tapIndex]
           if (res.tapIndex === 0) {
-            // 请求车牌号列表
             this.childList = []
-            util.myRequest({
-              method: 'get',
-              url: '/carinfo/carinfo/listNotoken',
+            uni.request({
+              url: 'http://39.100.243.114:8088/cvas/sys/common/static/download/server.json',
+              header: {
+                'content-type': 'application/json,charset=utf-8'
+              },
               success: ({ data }) => {
-                data.result.records.forEach(item => {
-                  this.childList.push(item.carno)
-                });
-                this.childName = this.childList[0]
+                console.log(data);
+                this.serverList = data
+                data.forEach(item => {
+                  this.childList.push(item.name)
+                })
               }
-            })
+            });
             this.From.UserName = '13577777777'
             this.From.PassWord = '123456'
+            // this.From.UserName = ''
+            // this.From.PassWord = ''
           } else {
-
+            uni.request({
+              url: 'http://39.100.243.114:8088/cvas/sys/common/static/download/server.json',
+              header: {
+                'content-type': 'application/json,charset=utf-8'
+              },
+              success: ({ data }) => {
+                console.log(data);
+                this.serverList = data
+                data.forEach(item => {
+                  this.childList.push(item.name)
+                })
+              }
+            });
             this.childList = []
             this.From.UserName = '15566666666'
             this.From.PassWord = '159456'
-            this.childList = ['供应商1', '供应商2', '供应商3', '供应商4', '供应商5']
-            this.childName = this.childList[0]
+            // this.From.UserName = ''
+            // this.From.PassWord = ''
           }
         }
       });
     },
-    // 选择车牌号或者手机号
+    // 选择服务器
     childChange () {
       if (this.childList.length === 0) {
         uni.showToast({
           icon: 'none',
           position: 'bottom',
-          title: '请先选择登录方式'
+          title: '请先选择服务器？'
         });
       } else {
-        const itemList = this.childList
+        const itemList = this.childList;
+        const serverList = this.serverList;
         uni.showActionSheet({
           itemList,
           success: (res) => {
             this.childName = itemList[res.tapIndex]
+            var url = serverList[res.tapIndex].path;
+            util.setSysUrl(url)
           }
         });
       }
@@ -160,18 +182,14 @@ export default {
         case '司机':
           const driverinfo = {
             username: this.From.UserName,
-            password: this.From.PassWord,
-            carno: this.childName
+            password: this.From.PassWord
           }
-          // uni.reLaunch({
-          //   url: '/pages/index/index'
-          // });
-          // 验证登录方式
+          // 验证服务器
           if (that.childList.length === 0) {
             uni.showToast({
               icon: 'none',
               position: 'bottom',
-              title: '请先选择登录方式?'
+              title: '请先选择登录方?'
             });
           } else {
             // 验证账号密码
@@ -185,19 +203,39 @@ export default {
                 }) => {
                   if (data.success === true) {
                     util.setToken(data.result.token)
-                    util.setcarInfo(data.result.carInfo)
                     util.saveUserData(data.result.userInfo)
-                    /* 验证成功跳转目标页面 */
-                    // uni.showToast({
-                    //   icon: 'success',
-                    //   position: 'center',
-                    //   title: data.message
-                    // });
-                    setTimeout(() => {
-                      uni.reLaunch({
-                        url: '/pages/relea/index'
-                      });
-                    }, 500)
+                    util.myRequest({
+                      method: 'get',
+                      url: '/carinfo/carinfo/getMyCar',
+                      data: {
+                        id: util.getUserId()
+                      },
+                      success: ({ data }) => {
+                        const itemList = []
+                        data.result.forEach(item => {
+                          itemList.push(item.carno)
+                        });
+                        uni.showActionSheet({
+                          itemList,
+                          success: (res) => {
+                            /* 验证成功跳转目标页面 */
+                            util.setcarInfo(data.result[res.tapIndex])
+                            setTimeout(() => {
+                              // uni.showToast({
+                              //   icon: 'success',
+                              //   position: 'center',
+                              //   title: data.message
+                              // });
+                              uni.reLaunch({
+                                url: '/pages/relea/index'
+                              });
+                            }, 500)
+                          }
+                        })
+                      }
+                    })
+
+
                   } else {
                     uni.showToast({
                       icon: 'none',
@@ -281,15 +319,25 @@ export default {
     },
     // 验证码登录
     verify () {
-      uni.reLaunch({
-        url: '/pages/login/verify'
-      })
+      uni.showToast({
+        icon: 'none',
+        position: 'bottom',
+        title: '此功能正在完善中暂不可用？'
+      });
+      // uni.reLaunch({
+      //   url: '/pages/login/verify'
+      // })
     },
     // 注册
     register () {
-      uni.reLaunch({
-        url: '/pages/login/register'
-      })
+      uni.showToast({
+        icon: 'none',
+        position: 'bottom',
+        title: '此功能正在完善中暂不可用？'
+      });
+      // uni.reLaunch({
+      //   url: '/pages/login/register'
+      // })
     },
     Switch () {
       this.SwiTch = !this.SwiTch

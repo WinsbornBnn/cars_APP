@@ -14,6 +14,8 @@
       >
         <swiper-item v-for="(item, index) in swiperList" :key="index">
           <image
+            :data-url="item.url"
+            @tap="ViewImages"
             :src="item.url"
             mode="aspectFill"
             v-if="item.type == 'image'"
@@ -82,7 +84,7 @@
         <view class="bg-white solid-bottom allAnswer">
           <view class="action"> 评论 </view>
         </view>
-        <view class="bg-white solid-bottom" style="margin-bottom:100upx">
+        <view class="bg-white solid-bottom" style="margin-bottom: 100upx">
           <block v-for="(item, index) in productInfo.clist" :key="index">
             <view style="display: flex" class="cu-item shadow margin-top-xl">
               <view class="cu-list menu-avatar left">
@@ -142,7 +144,7 @@ export default {
   onLoad () {
     that = this
     var proId = 0
-    uni.$on("test", (data) => {
+    uni.$on("goodsInfo", (data) => {
       proId = data.id
       this.proId = data.id
       that.getProductInfo(proId)
@@ -189,7 +191,6 @@ export default {
           id: proId
         },
         success: ({ data }) => {
-          console.log(data);
           if (data.success === true) {
             let newimage, newswiperList = []
             newimage = data.result.imgs ? data.result.imgs.split(',') : ''
@@ -208,6 +209,20 @@ export default {
           }
         }
       })
+    },
+    ViewImages (e) {
+      const arr = []
+      this.swiperList.forEach(item => {
+        if (item.url) {
+          arr.push(item.url)
+        }
+      });
+      let index = arr.findIndex(value => value == e.currentTarget.dataset.url)
+      uni.preViewImage({
+        urls: arr,
+        current: index,
+        indicator: 'default'
+      });
     },
     InputFocus (e) {
       this.InputBottom = e.detail.height

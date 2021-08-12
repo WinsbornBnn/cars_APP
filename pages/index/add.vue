@@ -3,6 +3,7 @@
     <cu-custom bgColor="bg-blue-one" isBack="true">
       <block slot="content">上传照片</block>
     </cu-custom>
+	<uni-notice-bar showIcon="true" showClose="true" background-color="#fff" color="#ff0000" scrollable="true" :speed="50" single="true" text="当提示请拍摄或选择有位置的图片时,打开手机定位功能,用手机相机拍摄,上传带有地址的图片"></uni-notice-bar>
     <view class="padding">
       <view class="padding-xl radius shadow shadow-lg bg-white" id="shadow"
         >车牌号：
@@ -52,7 +53,7 @@ export default {
       addressInfo: []
     }
   },
-  mounted () {
+  onLoad () {
     // if (this.carNoList.length === 0) {
     //   uni.showToast({
     //     duration: 2000,
@@ -65,7 +66,7 @@ export default {
     //     }
     //   });
     // }
-    uni.$on("test", (data) => {
+    uni.$on("append", (data) => {
       this.addressInfo = data
     })
     uni.getSystemInfo({
@@ -93,7 +94,6 @@ export default {
               'Accept': 'aplication/json,text/plain,*/*'
             },
             success: (uploadFileRes) => {
-              console.log(uploadFileRes);
               let imgData = JSON.parse(uploadFileRes.data)
               if (imgData.result === null) {
                 uni.showToast({
@@ -135,7 +135,6 @@ export default {
               'Accept': 'aplication/json,text/plain,*/*'
             },
             success: (uploadFileRes) => {
-              console.log(uploadFileRes);
               let imgData = JSON.parse(uploadFileRes.data)
               if (imgData.result === null) {
                 uni.showToast({
@@ -171,7 +170,8 @@ export default {
         uploadcarimg: this.uploadcarimg,
         uploaddriverimg: this.uploaddriverimg,
         uploadlat: this.carCoordinate.carlat,
-        uploadlng: this.carCoordinate.carlng
+        uploadlng: this.carCoordinate.carlng,
+		carno: this.carId
       }
       if (this.uploaddriverimg === '' || this.uploadcarimg === '') {
         uni.showToast({
@@ -185,7 +185,6 @@ export default {
           method: 'post',
           data: orderupload,
           success: ({ data }) => {
-            console.log(data);
             if (data.success === false) {
               uni.showToast({
                 duration: 2000,

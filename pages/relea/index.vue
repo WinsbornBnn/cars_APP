@@ -4,34 +4,38 @@
       <block slot="content">发布</block>
     </cu-custom>
     <view class="page-body">
-      <view class="radius shadow bg-white">
-        <swiper
-          class="screen-swiper square-dot"
-          :indicator-dots="true"
-          :circular="true"
-          :autoplay="true"
-          interval="5000"
-          duration="500"
-        >
-          <swiper-item v-for="(item, index) in swiperList" :key="index">
-            <image
-              style="border-radius: 15px"
-              :src="item.url"
-              mode="aspectFill"
-              v-if="item.type == 'image'"
-            ></image>
-            <video
-              :src="item.url"
-              :autoplay="false"
-              :loop="false"
-              :muted="false"
-              :show-play-btn="false"
-              :controls="true"
-              objectFit="cover"
-              v-if="item.type == 'video'"
-            ></video>
-          </swiper-item>
-        </swiper>
+      <view class="swiper">
+        <view class="swiper-box radius shadow bg-white">
+          <swiper
+            class="square-dot"
+            :circular="true"
+            :autoplay="true"
+            :indicator-dots="true"
+            interval="5000"
+            duration="500"
+          >
+            <swiper-item v-for="(item, index) in swiperList" :key="index">
+              <image
+                :data-url="item.url"
+                @click="ViewImage"
+                style="border-radius: 15px"
+                :src="item.url"
+                mode="aspectFill"
+                v-if="item.type == 'image'"
+              ></image>
+              <video
+                :src="item.url"
+                autoplay
+                loop
+                muted
+                :show-play-btn="false"
+                :controls="false"
+                objectFit="cover"
+                v-if="item.type == 'video'"
+              ></video>
+            </swiper-item>
+          </swiper>
+        </view>
       </view>
       <view class="padding-xl radius shadow bg-white margin-top">
         <text class="text-black text-bold"> 厂区公告</text>
@@ -165,38 +169,10 @@ import util from '@/common/util.js';
 export default {
   data () {
     return {
-      swiperList: [{
-        id: 0,
-        type: 'image',
-        url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big37006.jpg'
-      }, {
-        id: 1,
-        type: 'image',
-        url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big37006.jpg',
-      }, {
-        id: 2,
-        type: 'image',
-        url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big39000.jpg'
-      }, {
-        id: 3,
-        type: 'image',
-        url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg'
-      }, {
-        id: 4,
-        type: 'image',
-        url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big25011.jpg'
-      }, {
-        id: 5,
-        type: 'image',
-        url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big21016.jpg'
-      }, {
-        id: 6,
-        type: 'image',
-        url: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big99008.jpg'
-      }],
+      swiperList: [],
       dotStyle: false,
       towerStart: 0,
-      text: 999,
+      text: 9,
       direction: '',
       accountType: util.readUserData().accountType,
       accountShow: false
@@ -204,6 +180,10 @@ export default {
   },
   onShow () {
     this.accountShow = this.accountType === '2' ? false : true
+  },
+  onLoad () {
+    this.getSwiperList()
+    this.getAnnountCement()
   },
   methods: {
     showCarList (tab) {
@@ -215,7 +195,8 @@ export default {
       uni.navigateTo({
         url: '/pages/relea/postion?tab=' + tab,
         success: function () {
-          uni.$emit("test", url);
+          uni.$emit("releaPostion", url);
+          uni.$off("releaPostion");
         }
       });
     },
@@ -239,11 +220,75 @@ export default {
         url: '/pages/relea/find_work'
       });
     },
+    getSwiperList () {
+      util.myRequest({
+        url: '/sysPicture/sysPicture/list',
+        method: 'get',
+        success: ({ data }) => {
+          console.log(data);
+          if (data.success === true) {
+            const newSwiperList = []
+            data.result.records.forEach(item => {
+              if (item.picturetwo === '发现') {
+                newSwiperList.push({
+                  id: item.id,
+                  type: 'image',
+                  url: util.getSysImgUrl() + item.pictureone
+                })
+              }
+            });
+            this.swiperList = newSwiperList
+          } else {
+            uni.showToast({
+              icon: 'none',
+              position: 'center',
+              title: data.message
+            });
+          }
+        }
+      })
+    },
+    // *有问题
+    ViewImage (e) {
+      const arr = []
+      this.swiperList.forEach(item => {
+        if (item.url) {
+          arr.push(item.url)
+        }
+      });
+      let index = arr.findIndex(value => value == e.currentTarget.dataset.url)
+      uni.previewImage({
+        urls: arr,
+        current: index,
+        indicator: 'default'
+      });
+    },
+    // todo: 待完善的公告数量
+    getAnnountCement () {
+      util.myRequest({
+        method: 'get',
+        url: '/sys/annountCement/list',
+        success: ({
+          data
+        }) => {
+          if (data.success === true) {
+            console.log(data);
+            this.text = data.result.total
+          } else {
+            uni.showToast({
+              icon: 'none',
+              position: 'center',
+              title: data.message
+            });
+          }
+        }
+      })
+    }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 .page {
   height: 100vh;
 }
@@ -252,10 +297,10 @@ export default {
   width: 64upx;
   height: 64upx;
 }
-.swiper-box {
+/* .swiper-box {
   width: 92%;
   height: 30.7vw;
-}
+} */
 .radius {
   width: 90%;
   margin: 15px auto;
@@ -268,6 +313,35 @@ export default {
   position: absolute;
   top: -10px;
   right: 10px;
-  z-index: 9999;
+  z-index: 1;
+}
+
+.swiper {
+  width: 100%;
+  margin-top: 10upx;
+  display: flex;
+  justify-content: center;
+
+  .swiper-box {
+    width: 92%;
+    height: 40.7vw;
+    overflow: hidden;
+    border-radius: 15upx;
+    box-shadow: 0upx 8upx 25upx rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+
+    swiper {
+      width: 100%;
+      height: 40.7vw;
+
+      swiper-item {
+        image {
+          width: 100%;
+          height: 40.7vw;
+        }
+      }
+    }
+  }
 }
 </style>

@@ -42,7 +42,7 @@
         </block>
       </view>
       <view v-show="isLoadMore">
-        <uni-load-more :status="loadStatus"></uni-load-more>
+        <uni-load-more class="margin-top" :status="loadStatus"></uni-load-more>
       </view>
     </template>
 
@@ -61,7 +61,7 @@
         </block>
       </view>
       <view v-show="isLoadMore">
-        <uni-load-more :status="loadStatus"></uni-load-more>
+        <uni-load-more class="margin-top" :status="loadStatus"></uni-load-more>
       </view>
     </template>
   </view>

@@ -3,23 +3,26 @@
     <view class="cu-list menu-avatar left">
       <image
         class="cu-avatar round lg"
-        src="https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg"
+        @tap="ViewAvatar"
+        :src="avatarImg"
+        :data-url="avatarImg"
         mode=""
+        lazy-load
       ></image>
     </view>
     <view class="right">
       <view class="cu-item">
         <view class="content flex-sub">
-          <view style="margin: 5px 0">{{ detailList.name }}</view>
+          <view style="margin: 5px 0">{{ detailList.user }}</view>
           <view class="text-content" @click="goDetail">
+            <text>{{ detailList.name }}</text>
             <view :class="[showText ? 'topic_cont_text' : '']">
-              {{ detailList.description }}
+              {{ detailList.content }}
             </view>
             <template v-if="showText">
               <text
                 v-if="
-                  detailList.description !== null &&
-                  detailList.description.length > 70
+                  detailList.content !== null && detailList.content.length > 70
                 "
                 class="full_text"
                 @click.stop="toggleDescription"
@@ -32,8 +35,7 @@
               </view> -->
               <text
                 v-if="
-                  detailList.description !== null &&
-                  detailList.description.length > 70
+                  detailList.content !== null && detailList.content.length > 70
                 "
                 class="full_text"
                 @click.stop="toggleDescription"
@@ -48,29 +50,31 @@
                 @tap="ViewImage"
                 class="bg-img"
                 :src="item.imgs"
-                mode="widthFix"
+                mode=""
                 lazy-load
               ></image>
             </block>
           </view>
           <view class="text-gray text-sm padding u-f-jsb">
             <view class="padding-rf">
-              <text>0人回答</text>
-              <text>0点赞</text>
+              <text
+                >{{ detailList.numbers ? detailList.numbers : 0 }}人回答</text
+              >
+              <text>{{ detailList.likes ? detailList.likes : 0 }}点赞</text>
               <text
                 ><uni-dateformat
                   :format="'yyyy-MM-dd'"
                   :date="detailList.createTime"
-                  :threshold="[0, 2592000000]"
+                  :threshold="[0, 31536000000]"
                 ></uni-dateformat
               ></text>
             </view>
             <view class="like" @click.stop="myLike"
               ><text
-                :class="[isLike ? 'cuIcon-like' : 'cuIcon-likefill']"
+                :class="[!isLike ? 'cuIcon-like' : 'cuIcon-likefill']"
                 class="margin-lr-xs"
               ></text
-              >{{ isLike ? '关注' : '取消' }}</view
+              >{{ !isLike ? '关注' : '取消' }}</view
             >
           </view>
         </view>
@@ -95,7 +99,8 @@ export default {
       isLike: this.detailList.flag === 1 ? true : false,
       // 0 未关注 false，1 已关注 true
       sysid: util.readUserData().id,
-      rid: this.detailList.id
+      rid: this.detailList.id,
+      avatarImg: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg'
     }
   },
 
@@ -111,49 +116,31 @@ export default {
         rid: this.rid,// 信息id
         sysid: this.sysid,// 用户id
       }
-      // this.isLike = !this.isLike
-      if (!this.isLike) {
-        console.log('取消');
-        uni.showModal({
-          title: '提示',
-          content: '确定取消收藏吗？',
-          success: function (res) {
-            console.log(res);
-            if (res.confirm) {
-              this.isLike = true
-              // 取消收藏逻辑
-              util.myRequest({
-                url: 'releaseandsys/releaseandsys/deleteByRid',
-                method: 'delete',
-                data: {},
-                success: ({ data }) => {
-                  console.log(data);
-                  this.$emit('DeleteInfo')
-                  // if (data.success === true) {
-                  //   this.isLike = !this.isLike
-                  // }
-                }
-              })
-            } else if (res.cancel) {
+      // 取消关注
+      if (this.isLike) {
+        util.myRequest({
+          url: '/releaseandsys/releaseandsys/deleteByRid',
+          method: 'delete',
+          data: releaseandsys,
+          success: ({ data }) => {
+            if (data.success === true) {
+              this.$emit('DeleteInfo')
               this.isLike = false
-              return
             }
           }
-        });
+        })
       } else {
-        console.log('关注');
-        this.isLike = !this.isLike
+        // 关注
         util.myRequest({
           url: '/releaseandsys/releaseandsys/add',
           method: 'post',
           data: releaseandsys,
           success: ({ data }) => {
-            console.log(data);
-            // if (data.success === true) {
-            //   this.isLike = !this.isLike
-            // } else {
-            //   this.isLike = !this.isLike
-            // }
+            if (data.success === true) {
+              this.isLike = true
+            } else {
+              this.isLike = false
+            }
           }
         })
       }
@@ -172,6 +159,17 @@ export default {
         current: index,
         indicator: 'default'
       });
+    },
+    ViewAvatar (e) {
+      const arr = []
+      arr.push(e.currentTarget.dataset.url)
+      uni.previewImage({
+        urls: arr,
+        fail:(err)=>{
+          console.log(err);
+        }
+      });
+      console.log(e.currentTarget.dataset.url[0]);
     }
   },
 }

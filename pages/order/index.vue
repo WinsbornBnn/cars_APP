@@ -18,23 +18,23 @@
 			<view class="padding">
 				<view @click="goDetails(item)" v-for=" (item,index) in orderList" :key="index"
 					class="radius shadow shadow-lg orader margin-top-xl first-child"
-          :style="[{ width:item.factoryname.length + item.customername.length <= 10 ? 310 + 'px' : 330 + 'px' }]"
           >
-					<view class="flex">
-						<view class="flex-treble margin-xs radius text-lg padding-sx">
-							{{item.factoryname}} <text class="cuIcon-forwardfill text-grey"
-								style="padding-left:10px ;padding-right:10px ;"></text>{{item.customername}}
-						</view>
-						<view class="flex-sub  margin-xs radius padding-sx">
-							<view class='cu-tag round bg-blue light'>{{item.orderstatus == 0? '已完成':'运输中'}}</view>
-						</view>
-					</view>
+		  <!-- item.factoryname_Text.length + item.customername_Text.length <= 10 ? 310 + 'px' : -->
 					<view>
 						<view class="cu-item padding-or">
 							<view class="content">
-								<text class="cuIcon-deliver_fill text-grey"></text>
+								<text class="cuIcon-deliver_fill text-grey" style="margin-right: 2px;"></text>
 								<text class="text-grey">运单号：{{item.id}}</text>
 							</view>
+						</view>
+					</view>
+					<view class="flex">
+						<view class="flex-treble margin-xs radius text-lg" style="padding-left:15px ;">
+							{{item.factoryname_Text}} <text class="cuIcon-forwardfill text-grey"
+								style="padding-left:10px ;padding-right:10px ;"></text>{{item.customername_Text}}
+						</view>
+						<view class="flex-sub  margin-xs radius" style="padding-left:15px ;">
+							<view class='cu-tag round light' :class="[item.orderstatus == 0? 'bg-blue':'bg-red']">{{item.orderstatus == 0? '已完成':'运输中'}}</view>
 						</view>
 					</view>
 
@@ -44,7 +44,7 @@
 								<text class="text-grey text-sm">车牌号</text>
 							</view>
 							<view class="action">
-								<text class="text-black">{{item.carno}}</text>
+								<text class="text-black">{{item.carno_Text}}</text>
 							</view>
 						</view>
 						<view class="cu-item">
@@ -52,7 +52,7 @@
 								<text class="text-grey text-sm">公司</text>
 							</view>
 							<view class="action">
-								<text class="text-black">{{item.factoryname}}</text>
+								<text class="text-black">{{item.factoryname_Text}}</text>
 							</view>
 						</view>
 						<view class="cu-item">
@@ -84,14 +84,14 @@
 								<text class="text-grey text-sm">规格</text>
 							</view>
 							<view class="action">
-								<text class="text-black">{{item.goodsname}}</text>
+								<text class="text-black">{{item.goodsname_Text}}</text>
 							</view>
 						</view>
 					</view>
 				</view>
 			</view>
 			<view v-if="isLoadMore">
-				<uni-load-more :status="loadStatus"></uni-load-more>
+				<uni-load-more class="margin-top" :status="loadStatus"></uni-load-more>
 			</view>
 		</view>
 	</view>
@@ -144,9 +144,10 @@ export default {
     },
     goDetails (item) {
       uni.navigateTo({
-        url: '/pages/order/detail',
+        url: '/pages/order/orderDetail',
         success: function (res) {
-          uni.$emit("test", item);
+          uni.$emit("orderDetail", item);
+          uni.$off("orderDetail");
         }
       })
     },
@@ -184,7 +185,7 @@ export default {
     if (this.orderList.length <= 0) {
       this.getOrderList();
     } else {
-      console.log('我有数据了');
+      return
     }
   }
 }

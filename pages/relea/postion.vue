@@ -64,6 +64,7 @@
     </block>
 
     <block v-if="TabCur == 2">
+      <!-- 报警 -->
       <view class="page-body">
         <view class="page-section page-section-gap">
           <map
@@ -78,12 +79,14 @@
             <view class="title">备注</view>
             <textarea
               maxlength="-1"
-              v-model="textareaBInput"
+              v-model="textarea"
               placeholder="请输入说明"
             ></textarea>
           </view>
           <view class="padding flex flex-direction">
-            <button class="cu-btn bg-blue-one lg"  @click="postOrderupLoad">直接上报</button>
+            <button class="cu-btn bg-blue-one lg" @click="postOrderupLoad">
+              直接上报
+            </button>
           </view>
         </view>
       </view>
@@ -108,23 +111,28 @@ export default {
       url: '/inspection/scancar/list',
       textarea: '',
       address: '',
-      textareaBInput:''
+      textareaBInput: ''
     }
   },
   onLoad (option) {
-    this.TabCur = option.tab
-
-  },
-  mounted () {
     that = this
-    uni.$on("test", (data) => {
-      that.url = data
+    this.TabCur = option.tab
+    if (option.tab === '0') {
+      this.url = '/inspection/scancar/list'
+      this.getScancarList()
+    } else if (option.tab === '1') {
+      this.url = '/inspection/scancar/add'
+    } else {
+      this.url = '/inspection/accident/add'
+      this.textarea = this.textareaBInput
+    }
+    uni.$on("releaPostion", (data) => {
+      this.url = data
     })
     uni.getLocation({
       type: 'wgs84',
       geocode: true,
       success: function (res) {
-        console.log(res);
         that.address = res.address.poiName;
         that.longitude = res.longitude;
         that.latitude = res.latitude;
@@ -140,7 +148,7 @@ export default {
         that.url = '/inspection/scancar/add'
       } else {
         that.url = '/inspection/accident/add'
-        this.textarea = this.textareaBInput
+        // this.textarea = this.textareaBInput
       }
       this.TabCur = e.currentTarget.dataset.id;
       this.scrollLeft = (e.currentTarget.dataset.id - 1) * 60
@@ -150,19 +158,16 @@ export default {
       that.orderMarkers = []
       uni.chooseLocation({
         success: (res) => {
+          console.log(res);
           this.address = res.name
           this.latitude = res.latitude
           this.longitude = res.longitude
-          // console.log('位置名称：' + res.name);
-          // console.log('详细地址：' + res.address);
-          // console.log('纬度：' + res.latitude);
-          // console.log('经度：' + res.longitude);
           var markers = {
             longitude: res.longitude,
             latitude: res.latitude,
             iconPath: '../../static/drawable-xhdpi/faxian_icon6_icon1.png',
-            width: 30,
-            height: 30,
+            width: 50,
+            height: 50,
             callout: {
               content: `从“${res.name}”上报`,
               display: 'ALWAYS',
@@ -187,8 +192,8 @@ export default {
               longitude: item.lng,
               latitude: item.lat,
               iconPath: '../../static/drawable-xhdpi/faxian_icon6_icon1.png',
-              width: 30,
-              height: 30,
+              width: 50,
+              height: 50,
               callout: {
                 content: `${item.description}\t\t${item.createTime}\n${item.name}`,
                 display: 'ALWAYS',
@@ -204,7 +209,6 @@ export default {
       })
     },
     postOrderupLoad () {
-      console.log(this.url);
       if (this.textarea === '' || this.orderMarkers.length === 0) {
         uni.showToast({
           duration: 2000,

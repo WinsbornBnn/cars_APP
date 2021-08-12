@@ -7,7 +7,7 @@ export const ListMoreDataMixin = {
       swiperheight: 500,
       pageSize: 10,
       pageNo: 1,
-      isTwo:false
+      isTwo: false
     }
   },
   onLoad () {
@@ -27,7 +27,8 @@ export const ListMoreDataMixin = {
         data: {
           pageSize: this.pageSize,
           pageNo: this.pageNo,
-          orderstatus: this.orderstatus ? this.orderstatus : ''
+          orderstatus: this.orderstatus ? this.orderstatus : '',
+          carno: util.getcarInfo().id
         },
         success: ({ data }) => {
           if (data.success === true) {
@@ -62,7 +63,8 @@ export const ListMoreDataMixin = {
         url: '/order/orderinfo/list',
         method: 'get',
         data: {
-          parameterName: this.inputValue
+          parameterName: this.inputValue,
+          carno: util.getcarInfo().id
         },
         success: ({ data }) => {
           if (data.success === true) {
@@ -93,7 +95,7 @@ export const ListMoreDataMixin = {
             data.result.records.forEach(item => {
               newimage = item.imgs.split(',')
               item.picurl = []
-              item.description = '下面的例子演示了组件的属性设置bool值和数字的例子。注意false作为一个js变量，在组件的属性中使用时，属性前面需增加:冒号前缀，属性值仍使用引号包裹，但引号里不是字符串，而是js在组件的属性中使用时，属性前面需增加:冒号前缀，属性值仍使用引号包裹，但引号里不是字符串，而是js'
+              // item.description = '下面的例子演示了组件的属性设置bool值和数字的例子。注意false作为一个js变量，在组件的属性中使用时，属性前面需增加:冒号前缀，属性值仍使用引号包裹，但引号里不是字符串，而是js在组件的属性中使用时，属性前面需增加:冒号前缀，属性值仍使用引号包裹，但引号里不是字符串，而是js'
               for (let i = 0; i < newimage.length; i++) {
                 item.picurl.push({ imgs: util.getSysImgUrl() + newimage[i] })
               }
@@ -140,7 +142,7 @@ export const ListMoreDataMixin = {
             data.result.records.forEach(item => {
               newimage = item.imgs.split(',')
               item.picurl = []
-              item.description = '下面的例子演示了组件的属性设置bool值和数字的例子。注意false作为一个js变量，在组件的属性中使用时，属性前面需增加:冒号前缀，属性值仍使用引号包裹，但引号里不是字符串，而是js'
+              // item.description = '下面的例子演示了组件的属性设置bool值和数字的例子。注意false作为一个js变量，在组件的属性中使用时，属性前面需增加:冒号前缀，属性值仍使用引号包裹，但引号里不是字符串，而是js'
               for (let i = 0; i < newimage.length; i++) {
                 item.picurl.push({ imgs: util.getSysImgUrl() + newimage[i] })
               }
@@ -274,12 +276,14 @@ export const ListMoreDataMixin = {
     // 去详情页
     goDetail (item) {
       uni.navigateTo({
-        url: '/pages/relea/detail',
+        url: '/pages/relea/releaDetail',
         success: function () {
-          uni.$emit("test", item);
+          uni.$emit("releaDetail", item);
+          uni.$off('releaDetail')
         }
       })
     },
+    // 系统公告
     FindAnnountCementList () {
       util.myRequest({
         method: 'get',
@@ -298,6 +302,38 @@ export const ListMoreDataMixin = {
           }
         }
       })
+    },
+    // 车辆排队
+    getCarLineUpInfo () {
+      util.myRequest({
+        method: 'get',
+        url: '/order/orderinfo/getCarLineUpInfo',
+        success: ({
+          data
+        }) => {
+          if (data.success === true) {
+            const newLineUpInfoList = Object.assign(data.result)
+            const LineUpInfoList = []
+            for (const key in newLineUpInfoList) {
+              LineUpInfoList.push({
+                name: key,
+                list: newLineUpInfoList[key]
+              })
+            }
+            this.LineUpInfoList = LineUpInfoList
+          } else {
+            uni.showToast({
+              icon: 'none',
+              position: 'center',
+              title: data.message
+            });
+          }
+        }
+      })
     }
+    // todo: 公告查看之后的操作，待完善
+  },
+  watch:{
+    
   }
 }

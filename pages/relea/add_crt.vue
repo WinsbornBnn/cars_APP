@@ -20,7 +20,7 @@
 				</view>
 				<view class="cu-form-group align-start">
 					<view class="title">内容</view>
-					<textarea maxlength="-1" :disabled="modalName!=null" @input="textareaBInput"
+					<textarea v-model="addContent" maxlength="-1" :disabled="modalName!=null" @input="textareaBInput"
 						style="min-height: 300px;" placeholder="多行文本输入框"></textarea>
 				</view>
 
@@ -74,9 +74,9 @@ export default {
       addType: ''
     }
   },
-  mounted () {
+  onLoad () {
     that = this
-    uni.$on('test', (data) => {
+    uni.$on('addCrt', (data) => {
       that.addType = data
     })
   },
@@ -113,6 +113,7 @@ export default {
       const release = {
         content: this.addContent,
         imgs: this.addImgList,
+        description: this.addContent,
         name: this.addName,
         tel: this.addTel,
         type: this.addType,
@@ -143,7 +144,6 @@ export default {
             method: 'post',
             data: release,
             success: res => {
-              console.log(res);
               this.formReset()
             }
           })

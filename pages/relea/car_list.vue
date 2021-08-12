@@ -25,74 +25,31 @@
     <template v-if="TabCur == 0">
       <view style="margin-top: 50px">
         <!-- 带图标 -->
-        <uni-collapse>
-          <uni-collapse-item title="水泥分厂一" num="3">
-            <view class="margin-bottom-sm">
-              <view class="cu-list menu">
-                <view class="cu-item">
-                  <view class="content">
-                    <text class="text-grey margin-left text-bold"
-                      >川A51W1Q</text
-                    >
-                  </view>
-                  <view class="action">
-                    <text class="text-grey text-sm">2020-08-10 12:12:12</text>
-                  </view>
-                </view>
-              </view>
-            </view>
-          </uni-collapse-item>
-
-          <uni-collapse-item title="水泥分厂一" num="3">
-            <view class="margin-bottom-sm">
-              <view class="cu-list menu">
-                <view class="cu-item">
-                  <view class="content">
-                    <text class="text-grey margin-left text-bold"
-                      >川A51W1Q</text
-                    >
-                  </view>
-                  <view class="action">
-                    <text class="text-grey text-sm">2020-08-10 12:12:12</text>
+        <uni-collapse accordion="true">
+          <block v-for="(item, index) in LineUpInfoList" :key="index">
+            <uni-collapse-item :title="item.name" num="3">
+              <view class="margin-bottom-sm">
+                <view class="cu-list menu">
+                  <view
+                    class="cu-item"
+                    v-for="(item1, index1) in item.list"
+                    :key="index1"
+                  >
+                    <view class="content">
+                      <text class="text-grey margin-left text-bold">{{
+                        item1.carno
+                      }}</text>
+                    </view>
+                    <view class="action">
+                      <text class="text-grey text-sm">{{
+                        item1.ordertime
+                      }}</text>
+                    </view>
                   </view>
                 </view>
               </view>
-            </view>
-          </uni-collapse-item>
-
-          <uni-collapse-item title="水泥分厂一" num="3">
-            <view class="margin-bottom-sm">
-              <view class="cu-list menu">
-                <view class="cu-item">
-                  <view class="content">
-                    <text class="text-grey margin-left text-bold"
-                      >川A51W1Q</text
-                    >
-                  </view>
-                  <view class="action">
-                    <text class="text-grey text-sm">2020-08-10 12:12:12</text>
-                  </view>
-                </view>
-              </view>
-            </view>
-          </uni-collapse-item>
-
-          <uni-collapse-item title="水泥分厂一" num="3">
-            <view class="margin-bottom-sm">
-              <view class="cu-list menu">
-                <view class="cu-item">
-                  <view class="content">
-                    <text class="text-grey margin-left text-bold"
-                      >川A51W1Q</text
-                    >
-                  </view>
-                  <view class="action">
-                    <text class="text-grey text-sm">2020-08-10 12:12:12</text>
-                  </view>
-                </view>
-              </view>
-            </view>
-          </uni-collapse-item>
+            </uni-collapse-item>
+          </block>
         </uni-collapse>
       </view>
       <view v-show="isLoadMore">
@@ -191,13 +148,18 @@ export default {
       tabNav: ['车辆排队', '公告查看'],
       modalName: '',
       annountCementList: [],
+      LineUpInfoList: [],
       annountItem: {},
       isRead: true
     }
   },
   onLoad (option) {
+    if (option.tab === '0') {
+      this.getCarLineUpInfo()
+    } else {
+      this.FindAnnountCementList()
+    }
     this.TabCur = option.tab
-    this.FindAnnountCementList()
   },
   onShow () {
   },
@@ -230,8 +192,8 @@ export default {
       if (e.currentTarget.dataset.id == 0) {
         // this.url = '/publish/release/buylist'
         // this.pageNo = 1
-        // this.annountCementList = []
-        // this.FindAnnountCementList()
+        this.LineUpInfoList = []
+        this.getCarLineUpInfo()
       } else {
         this.url = '/sys/annountCement/list'
         this.pageNo = 1
@@ -244,7 +206,7 @@ export default {
     showModal (item) {
       this.modalName = "Image";//e.currentTarget.dataset.target
       this.annountItem = Object.assign(item)
-      this.isRead = false
+      // this.isRead = !this.isRead
     },
     hideModal (e) {
       this.modalName = null

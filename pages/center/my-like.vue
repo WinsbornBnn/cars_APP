@@ -9,11 +9,12 @@
           @goDetail="goDetail(item)"
           :detailList="item"
           :index="index"
+          @DeleteInfo="DeleteInfo(item)"
         ></detail-list>
       </block>
     </view>
-    <view v-show="isLoadMore">
-      <uni-load-more :status="loadStatus"></uni-load-more>
+    <view v-show="myLikeList.length === 0 ? true : false">
+      <uni-load-more class="margin-top" :status="loadStatus"></uni-load-more>
     </view>
   </view>
 </template>
@@ -27,71 +28,62 @@ export default {
   },
   data () {
     return {
-      loadStatus: 'more',
+      loadStatus: 'nomore',
       isLoadMore: false,
       pageSize: 10,
       pageNo: 1,
       myLikeList: [],
-      url: '/publish/release/buylist'
+      url: '/releaseandsys/releaseandsys/queryBySysId'
     }
   },
-  onLoad(){
+  onLoad () {
     this.getMyLikeList()
   },
   onPullDownRefresh () {
     setTimeout(() => {
-      this.pageNo = 1
+      // this.pageNo = 1
       this.myLikeList = []
       this.getMyLikeList()
       uni.stopPullDownRefresh()
     }, 3000);
   },
   //上拉触底函数
-  onReachBottom () {
-    if (this.myLikeList.length < 10) {
-      this.isLoadMore = false
-    } else {
-      this.isLoadMore = true
-      if (this.isLoadMore) {
-        this.loadStatus = 'loading'
-        setTimeout(() => {
-          this.pageNo += 1
-          this.getMyLikeList()
-        }, 3000);
-      }
-    }
-  },
+  // onReachBottom () {
+  //   if (this.myLikeList.length < 10) {
+  //     this.isLoadMore = false
+  //   } else {
+  //     this.isLoadMore = true
+  //     if (this.isLoadMore) {
+  //       this.loadStatus = 'loading'
+  //       setTimeout(() => {
+  //         this.pageNo += 1
+  //         this.getMyLikeList()
+  //       }, 3000);
+  //     }
+  //   }
+  // },
   methods: {
     getMyLikeList () {
       util.myRequest({
         method: 'get',
         url: this.url,
         data: {
-          pageNo: this.pageNo,
-          pageSize: this.pageSize
+          sysid: util.readUserData().id
         },
         success: ({ data }) => {
+          console.log(data,'74');
           if (data.success === true) {
             let newimage, newFoodList = []
-            data.result.records.forEach(item => {
-              newimage = item.imgs.split(',')
-              item.picurl = []
-              item.description = '下面的例子演示了组件的属性设置bool值和数字的例子。注意false作为一个js变量，在组件的属性中使用时，属性前面需增加:冒号前缀，属性值仍使用引号包裹，但引号里不是字符串，而是js'
+            data.result.forEach(item => {
+              newimage = item.release.imgs.split(',')
+              item.release.picurl = []
+              // item.release.description = '下面的例子演示了组件的属性设置bool值和数字的例子。注意false作为一个js变量，在组件的属性中使用时，属性前面需增加:冒号前缀，属性值仍使用引号包裹，但引号里不是字符串，而是js'
               for (let i = 0; i < newimage.length; i++) {
-                item.picurl.push({ imgs: util.getSysImgUrl() + newimage[i] })
+                item.release.picurl.push({ imgs: util.getSysImgUrl() + newimage[i] })
               }
-              newFoodList.push(item)
+              newFoodList.push(item.release)
             });
             this.myLikeList = newFoodList
-            if (data.result.records.length < this.pageSize) {
-              this.isLoadMore = true
-              this.loadStatus = 'noMore'
-              if (this.pageNo > 1) {
-                this.pageNo -= 1
-              }
-            } else {
-              this.isLoadMore = false
-            }
           } else {
             uni.showToast({
               icon: 'none',
@@ -105,13 +97,22 @@ export default {
     },
     goDetail (item) {
       uni.navigateTo({
-        url: '/pages/relea/detail',
+        url: '/pages/relea/releaDetail',
         success: function () {
-          uni.$emit("test", item);
+          uni.$emit("releaDetail", item);
+          uni.$off("releaDetail");
         }
       })
     },
-  },
+    DeleteInfo (item) {
+      // var index = this.myLikeList.indexOf(item)
+      // if (index > -1) {
+      //   this.myLikeList.splice(index, 1)
+      // }
+      this.myLikeList = []
+      this.getMyLikeList()
+    }
+  }
 }
 </script>
 

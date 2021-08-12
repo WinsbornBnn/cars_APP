@@ -15,9 +15,9 @@
         <view class="content" :style="[{ top: StatusBar + 'px' }]">
           <slot name="content"></slot>
         </view>
-        <view class="action" @tap="AddPage" v-if="isR">
+        <!-- <view class="action" @tap="AddPage" v-if="isR">
           <text class="cuIcon-camera text-df"></text>
-        </view>
+        </view> -->
         <view class="action" @tap="AddAct" v-if="isAdd">
           <text class="cuIcon-edit text-df"></text>
         </view>
@@ -101,7 +101,10 @@ export default {
         uni.navigateTo({
           url: '/pages/index/add',
           success: () => {
-            uni.$emit("test", this.addressInfo);
+            setInterval(() => {
+              uni.$emit("append", this.addressInfo);
+              uni.$off('append')
+            }, 1000);
           }
         });
       }
@@ -113,8 +116,11 @@ export default {
         success: (res) => {
           uni.navigateTo({
             url: '/pages/relea/add_crt',
-            success:()=>{
-              uni.$emit('test',itemList[res.tapIndex])
+            success: () => {
+              setInterval(() => {
+                uni.$emit('addCrt', itemList[res.tapIndex])
+                uni.$off('addCrt')
+              }, 1000);
             }
           });
         }

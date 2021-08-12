@@ -56,7 +56,7 @@ export default {
       startDate: '',
       endDate: '',
       mapHeight: 100,
-      carNo: util.getcarInfo().id,
+      carNo: util.getcarInfo().carno,
       isShow: true
     }
   },
@@ -70,8 +70,8 @@ export default {
     },
     startDateChange (startTime) {
       // this.isShow = !this.isShow
-        this.startDate = startTime
-      if (this.startDate !== '') {
+      this.startDate = startTime
+      if (this.endDate !== '') {
         this.getTrack()
       }
     },
@@ -121,9 +121,9 @@ export default {
         method: 'get',
         url: '/track/track/getTrackByCarNo',
         data: {
-          carNo: '014535405096',
-          beginTime: '2020-12-27 12:00:00',
-          endTime: '2021-01-27 12:10:00'
+          carNo: this.carNo,
+          beginTime: this.startDate,
+          endTime: this.endDate
         },
         success: ({ data }) => {
           uni.hideLoading();

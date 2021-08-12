@@ -5,37 +5,43 @@
     </cu-custom>
 
     <view class="page-body">
-      <view class="radius shadow bg-white">
-        <swiper
-          class="screen-swiper square-dot"
-          :indicator-dots="true"
-          :circular="true"
-          :autoplay="true"
-          interval="5000"
-          duration="500"
-        >
-          <swiper-item v-for="(item, index) in swiperList" :key="index">
-            <image
-              style="border-radius: 15px"
-              :src="item.url"
-              mode="aspectFill"
-              v-if="item.type == 'image'"
-            ></image>
-            <video
-              :src="item.url"
-              autoplay
-              loop
-              muted
-              :show-play-btn="false"
-              :controls="false"
-              objectFit="cover"
-              v-if="item.type == 'video'"
-            ></video>
-          </swiper-item>
-        </swiper>
+      <view class="swiper">
+        <view class="swiper-box radius shadow bg-white">
+          <swiper
+            class="square-dot"
+            :circular="true"
+            :autoplay="true"
+            :indicator-dots="true"
+            interval="5000"
+            duration="500"
+          >
+            <swiper-item v-for="(item, index) in swiperList" :key="index">
+              <image
+                :data-url="item.url"
+                @click="ViewImage"
+                style="border-radius: 15px"
+                :src="item.url"
+                mode="aspectFill"
+                v-if="item.type == 'image'"
+              ></image>
+              <video
+                :src="item.url"
+                autoplay
+                loop
+                muted
+                :show-play-btn="false"
+                :controls="false"
+                objectFit="cover"
+                v-if="item.type == 'video'"
+              ></video>
+            </swiper-item>
+          </swiper>
+        </view>
       </view>
-      <view class="grid col-4 text-center radius shadow bg-white"
-      style="padding:15px;">
+      <view
+        class="grid col-4 text-center radius shadow bg-white"
+        style="padding: 15px"
+      >
         <view class="cu-item text-center" @tap="showCarList(0)">
           <view class="cuIcon-cu-image">
             <uni-badge
@@ -78,9 +84,9 @@
             <uni-badge
               size="small"
               :text="
-                fourTotal.orderAllNoFinWeight > 99
+                fourTotal.orderAllNoFin > 99
                   ? '99+'
-                  : fourTotal.orderAllNoFinWeight
+                  : fourTotal.orderAllNoFin
               "
               type="error"
               class="unibadge"
@@ -99,7 +105,7 @@
             <uni-badge
               size="small"
               :text="
-                fourTotal.orderAllNoFin > 99 ? '99+' : fourTotal.orderAllNoFin
+                fourTotal.orderAllNoFinWeight > 99 ? '99+' : fourTotal.orderAllNoFinWeight
               "
               type="error"
               class="unibadge"
@@ -113,6 +119,20 @@
           <view>未完成订单</view>
           <view>重量</view>
         </view>
+      </view>
+      <view class="col-4 radius shadow bg-white" style="padding: 15px">
+        <view style="margin: 5px 0"
+          >全部订单重量<text
+            style="color: #f00; margin-left: 22px; margin-right: 5px"
+            >{{ fourTotal.orderAllWeight }}</text
+          >吨</view
+        >
+        <view style="margin: 5px 0"
+          >未完成订单重量<text
+            style="color: #f00; margin-left: 10px; margin-right: 5px"
+            >{{ fourTotal.orderAllNoFinWeight }}</text
+          >吨</view
+        >
       </view>
     </view>
   </view>
@@ -151,6 +171,7 @@ export default {
   onLoad () {
     this.TowerSwiper('swiperList');
     this.getFourTotal()
+    this.getSwiperList()
     uni.navigateTo({
       url: './details'
     })
@@ -224,7 +245,8 @@ export default {
           uni.navigateTo({
             url: '/pages/order/order_list',
             success: () => {
-              uni.$emit('test', { value: '全部订单数量', orderStatus: '' })
+              uni.$emit('orderList', { value: '全部订单数量', orderStatus: '' })
+              uni.$off('orderList')
             }
           });
           break;
@@ -235,7 +257,8 @@ export default {
           uni.navigateTo({
             url: '/pages/order/order_list',
             success: () => {
-              uni.$emit('test', { value: '未完成订单数量', orderStatus: 1 })
+              uni.$emit('orderList', { value: '未完成订单数量', orderStatus: 1 })
+              uni.$off('orderList')
             }
           });
           break;
@@ -267,11 +290,53 @@ export default {
         }
       })
     },
+    getSwiperList () {
+      util.myRequest({
+        url: '/sysPicture/sysPicture/list',
+        method: 'get',
+        success: ({ data }) => {
+          console.log(data);
+          if (data.success === true) {
+            const newSwiperList = []
+            data.result.records.forEach(item => {
+              if (item.picturetwo === '订单') {
+                newSwiperList.push({
+                  id: item.id,
+                  type: 'image',
+                  url: util.getSysImgUrl() + item.pictureone
+                })
+              }
+            });
+            this.swiperList = newSwiperList
+          } else {
+            uni.showToast({
+              icon: 'none',
+              position: 'center',
+              title: data.message
+            });
+          }
+        }
+      })
+    },
+    ViewImage (e) {
+      const arr = []
+      this.swiperList.forEach(item => {
+        if (item.url) {
+          arr.push(item.url)
+        }
+      });
+      let index = arr.findIndex(value => value == e.currentTarget.dataset.url)
+      uni.previewImage({
+        urls: arr,
+        current: index,
+        indicator: 'default'
+      });
+    },
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 .tower-swiper .tower-item {
   transform: scale(calc(0.5 + var(--index) / 10));
   margin-left: calc(var(--left) * 100upx - 150upx);
@@ -283,9 +348,33 @@ export default {
   height: 64px;
 }
 
-.swiper-box {
-  width: 92%;
-  height: 30.7vw;
+.swiper {
+  width: 100%;
+  margin-top: 10upx;
+  display: flex;
+  justify-content: center;
+
+  .swiper-box {
+    width: 92%;
+    height: 40.7vw;
+    overflow: hidden;
+    border-radius: 15upx;
+    box-shadow: 0upx 8upx 25upx rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 1;
+
+    swiper {
+      width: 100%;
+      height: 40.7vw;
+
+      swiper-item {
+        image {
+          width: 100%;
+          height: 40.7vw;
+        }
+      }
+    }
+  }
 }
 .radius {
   width: 90%;

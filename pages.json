@@ -18,19 +18,35 @@
 			"style": {}
 		},
 		{
-			"path": "pages/map/index",
-			"style": {}
-		},
-		{
 			"path": "pages/index/add",
 			"style": {}
 		},
 		{
-			"path": "pages/relea/index",
+			"path": "pages/index/priverIndex",
 			"style": {}
 		},
 		{
-			"path": "pages/index/priverIndex",
+			"path": "pages/order/index",
+			"style": {
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50
+			}
+		},
+		{
+			"path": "pages/order/orderDetail",
+			"style": {}
+		},
+		{
+			"path": "pages/order/all_list",
+			"style": {}
+		},
+		{
+			"path": "pages/order/order_list",
+			"style": {}
+		},
+
+		{
+			"path": "pages/relea/index",
 			"style": {}
 		},
 		{
@@ -64,7 +80,7 @@
 			"style": {}
 		},
 		{
-			"path": "pages/relea/detail",
+			"path": "pages/relea/releaDetail",
 			"style": {
 				"onReachBottomDistance": 50
 			}
@@ -84,6 +100,17 @@
 			}
 		},
 		{
+			"path": "pages/shop/index",
+			"style": {
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50
+			}
+		},
+		{
+			"path": "pages/shop/goods_info",
+			"style": {}
+		},
+		{
 			"path": "pages/center/index",
 			"style": {}
 		},
@@ -99,34 +126,28 @@
 			}
 		},
 		{
-			"path": "pages/shop/index",
+			"path": "pages/center/my-car",
+			"style": {}
+		},
+		{
+			"path": "pages/center/change-password",
+			"style": {}
+		},
+		{
+			"path": "uni_modules/uni-upgrade-center-app/pages/upgrade-popup",
 			"style": {
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 50
+				"disableScroll": true,
+				"app-plus": {
+					"backgroundColorTop": "transparent",
+					"background": "transparent",
+					"titleNView": false,
+					"scrollIndicator": false,
+					"popGesture": "none",
+					"animationType": "fade-in",
+					"animationDuration": 200
+
+				}
 			}
-		},
-		{
-			"path": "pages/order/index",
-			"style": {
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 50
-			}
-		},
-		{
-			"path": "pages/shop/goods_info",
-			"style": {}
-		},
-		{
-			"path": "pages/order/detail",
-			"style": {}
-		},
-		{
-			"path": "pages/order/all_list",
-			"style": {}
-		},
-		{
-			"path": "pages/order/order_list",
-			"style": {}
 		}
 	],
 	"globalStyle": {

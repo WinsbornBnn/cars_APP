@@ -74,7 +74,6 @@ export default {
         },
         success: ({ data }) => {
           if (data.success === true) {
-            console.log(data);
             data.result.forEach(item => {
               this.markers.push({
                 latitude: item.lat,
@@ -84,7 +83,6 @@ export default {
                 height: 40
               })
             });
-            console.log(this.markers);
           } else {
             uni.showToast({
               icon: 'none',

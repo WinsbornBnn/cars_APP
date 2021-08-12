@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import util from '@/common/util.js';
 var that
 
 export default {
@@ -64,7 +65,8 @@ export default {
       Idcard: '',
       PlateNum: '',
       vehicleNum: '',
-      TellNum: ''
+      TellNum: '',
+      userId: util.readUserData().id
     }
   },
   onLoad () {
@@ -72,7 +74,55 @@ export default {
   },
   methods: {
     formSubmit () {
-      console.log('上传');
+      let iphoneReg = /^[1][3,4,5,7,8,9][0-9]{9}$/
+      const sysAuthentication = {
+        bycarNumber: this.vehicleNum,
+        carNumber: this.PlateNum,
+        idcard: this.Idcard,
+        name: this.username,
+        phone: this.TellNum,
+        sid: this.userId
+      }
+      if (this.username === '' ||
+        this.Idcard === '' ||
+        this.PlateNum === '' ||
+        this.vehicleNum === '') {
+        uni.showToast({
+          icon: 'none',
+          position: 'center',
+          title: '请先完善认证信息？'
+        })
+      } else {
+        if (!iphoneReg.test(this.TellNum)) {
+          uni.showToast({
+            icon: 'none',
+            position: 'center',
+            title: '手机号码格式不对?'
+          });
+          return false
+        } else {
+          util.myRequest({
+            url: '/baiduapi/sel/selectSysAuth',
+            method: 'post',
+            data: sysAuthentication,
+            success: ({ data }) => {
+              if (data.success === true) {
+                setTimeout(() => {
+                uni.reLaunch({
+                  url: '/pages/center/index'
+                });
+              }, 2000);
+              } else {
+                uni.showToast({
+                  icon: 'none',
+                  position: 'bottom',
+                  title: '认证失败请重试？'
+                });
+              }
+            }
+          })
+        }
+      }
     },
     // 身份证
     addIdCardImage () {
@@ -83,16 +133,37 @@ export default {
         success: function (res) {
           const tempFilePaths = res.tempFilePaths;
           uni.uploadFile({
-            url: '',
+            url: util.getSysUrl() + '/sys/common/upload',
             fileType: "image",
             filePath: tempFilePaths[0],
-            name: 'imgFile',
+            name: 'file',
+            header: {
+              'X-Access-Token': util.getToken(),
+              'Accept': 'aplication/json,text/plain,*/*'
+            },
             success: (uploadFileRes) => {
-              that.IdImageUrl = tempFilePaths[0]
-              that.getIDCard()
-              // let imgData = JSON.parse(uploadFileRes.data)
-              // 上传图片后处理的逻辑
-              // this.imagesUrl = imgData.data.imgUrl
+              let imgData = JSON.parse(uploadFileRes.data)
+              let uploadUrl = imgData.message
+              that.IdImageUrl = util.getSysImgUrl() + imgData.message
+              util.myRequest({
+                url: '/baiduapi/sel/selectIdcard',
+                method: 'get',
+                data: {
+                  images: uploadUrl
+                },
+                success: ({ data }) => {
+                  if (data.success === true) {
+                    that.username = data.result.name
+                    that.Idcard = data.result.idNumber
+                  } else {
+                    uni.showToast({
+                      icon: 'none',
+                      position: 'center',
+                      title: data.message
+                    });
+                  }
+                }
+              })
             }
           });
         }
@@ -107,16 +178,42 @@ export default {
         sourceType: ['album', 'camera'],
         success: function (res) {
           const tempFilePaths = res.tempFilePaths;
-          that.DriverImageUrl = tempFilePaths[0]
+          // that.DriverImageUrl = tempFilePaths[0]
           uni.uploadFile({
-            url: '',
+            url: util.getSysUrl() + '/sys/common/upload',
             fileType: "image",
             filePath: tempFilePaths[0],
-            name: 'imgFile',
+            name: 'file',
+            header: {
+              'X-Access-Token': util.getToken(),
+              'Accept': 'aplication/json,text/plain,*/*'
+            },
             success: (uploadFileRes) => {
-              // let imgData = JSON.parse(uploadFileRes.data)
-              // 上传图片后处理的逻辑
-              // this.imagesUrl = imgData.data.imgUrl
+              let imgData = JSON.parse(uploadFileRes.data)
+              let uploadUrl = imgData.message
+              that.DriverImageUrl = util.getSysImgUrl() + imgData.message
+              util.myRequest({
+                url: '/baiduapi/sel/selectDriving',
+                method: 'get',
+                data: {
+                  images: uploadUrl
+                },
+                success: ({ data }) => {
+                  if (data.success === true) {
+                    uni.showToast({
+                      icon: 'success',
+                      position: 'center',
+                      title: data.message
+                    });
+                  } else {
+                    uni.showToast({
+                      icon: 'none',
+                      position: 'center',
+                      title: data.message
+                    });
+                  }
+                }
+              })
             }
           });
         }
@@ -131,22 +228,50 @@ export default {
         sourceType: ['album', 'camera'],
         success: function (res) {
           const tempFilePaths = res.tempFilePaths;
-          that.DrivingImageUrl = tempFilePaths[0]
+          // that.DrivingImageUrl = tempFilePaths[0]
           uni.uploadFile({
-            url: '',
+            url: util.getSysUrl() + '/sys/common/upload',
             fileType: "image",
             filePath: tempFilePaths[0],
-            name: 'imgFile',
+            name: 'file',
+            header: {
+              'X-Access-Token': util.getToken(),
+              'Accept': 'aplication/json,text/plain,*/*'
+            },
             success: (uploadFileRes) => {
-              // let imgData = JSON.parse(uploadFileRes.data)
-              // 上传图片后处理的逻辑
-              // this.imagesUrl = imgData.data.imgUrl
+              let imgData = JSON.parse(uploadFileRes.data)
+              let uploadUrl = imgData.message
+              that.DrivingImageUrl = util.getSysImgUrl() + imgData.message
+              util.myRequest({
+                url: '/baiduapi/sel/selectVehicle',
+                method: 'get',
+                data: {
+                  images: uploadUrl
+                },
+                success: ({ data }) => {
+                  that.PlateNum = data.result.plateNumber
+                  that.vehicleNum = data.result.carNumber
+                  if (data.success === true) {
+                    uni.showToast({
+                      icon: 'success',
+                      position: 'center',
+                      title: data.message
+                    });
+                  } else {
+                    uni.showToast({
+                      icon: 'none',
+                      position: 'center',
+                      title: data.message
+                    });
+                  }
+                }
+              })
             }
           });
         }
       });
-    },
-  },
+    }
+  }
 }
 </script>
 
