@@ -247,7 +247,7 @@ export default {
         }) => {
           console.log(data)
           uni.hideLoading();
-          if (data.success === true) {
+          if (data.success) {
             if (data.result.length === 0) {
               uni.showToast({
                 icon: 'none',

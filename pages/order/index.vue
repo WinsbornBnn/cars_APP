@@ -182,10 +182,29 @@ export default {
     }
   },
   mounted () {
-    if (this.orderList.length <= 0) {
-      this.getOrderList();
+    if (!this.isThirdType()) {
+      uni.showToast({
+        icon: 'none',
+        position: 'center',
+        title: '需完成认证后才能访问？'
+      })
+      setTimeout(() => {
+        uni.reLaunch({
+          url: '/pages/center/rz',
+          success: () => {
+            setInterval(() => {
+              uni.$emit("thridType", 'order');
+              uni.$off('thridType')
+            }, 1000);
+          }
+        });
+      }, 500);
     } else {
-      return
+      if (this.orderList.length <= 0) {
+        this.getOrderList();
+      } else {
+        return
+      }
     }
   }
 }

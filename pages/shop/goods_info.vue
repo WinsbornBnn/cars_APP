@@ -163,7 +163,7 @@ export default {
           method: 'post',
           data: comment,
           success: ({ data }) => {
-            if (data.success === true) {
+            if (data.success) {
               this.commentValue = ''
               this.getProductInfo(this.proId)
             } else {
@@ -191,7 +191,7 @@ export default {
           id: proId
         },
         success: ({ data }) => {
-          if (data.success === true) {
+          if (data.success) {
             let newimage, newswiperList = []
             newimage = data.result.imgs ? data.result.imgs.split(',') : ''
             for (let i = 0; i < newimage.length; i++) {

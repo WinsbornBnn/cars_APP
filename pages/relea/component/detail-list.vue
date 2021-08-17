@@ -123,7 +123,7 @@ export default {
           method: 'delete',
           data: releaseandsys,
           success: ({ data }) => {
-            if (data.success === true) {
+            if (data.success) {
               this.$emit('DeleteInfo')
               this.isLike = false
             }
@@ -136,7 +136,7 @@ export default {
           method: 'post',
           data: releaseandsys,
           success: ({ data }) => {
-            if (data.success === true) {
+            if (data.success) {
               this.isLike = true
             } else {
               this.isLike = false

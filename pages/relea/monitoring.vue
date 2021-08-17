@@ -127,7 +127,7 @@ export default {
         },
         success: ({ data }) => {
           uni.hideLoading();
-          if (data.success === true) {
+          if (data.success) {
             const points = []
             data.result.forEach(item => {
               points.push({

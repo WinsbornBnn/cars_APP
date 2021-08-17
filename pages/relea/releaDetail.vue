@@ -139,7 +139,7 @@ export default {
           id: this.rid
         },
         success: ({ data }) => {
-          if (data.success === true) {
+          if (data.success) {
             this.detailList = data.result.somesslist
             this.ridTotal = data.result.somesslist ? data.result.somesslist.length : 0
           } else {
@@ -171,7 +171,7 @@ export default {
           method: 'post',
           data: releasecomment,
           success: ({ data }) => {
-            if (data.success === true) {
+            if (data.success) {
               this.getDetailList()
             }
           }
@@ -198,7 +198,7 @@ export default {
           data: rcLikeAndSys,
           success: ({ data }) => {
             console.log(data);
-            if (data.success === true) {
+            if (data.success) {
               this.isHand = false
             }
           }
@@ -211,7 +211,7 @@ export default {
           data: rcLikeAndSys,
           success: ({ data }) => {
             console.log(data);
-            if (data.success === true) {
+            if (data.success) {
               this.isHand = true
             } else {
               this.isHand = false
@@ -233,7 +233,7 @@ export default {
           method: 'DELETE',
           data: rcLikeAndSys,
           success: ({ data }) => {
-            if (data.success === true) {
+            if (data.success) {
               this.detailList = []
               this.getDetailList()
             }
@@ -246,7 +246,7 @@ export default {
           method: 'post',
           data: rcLikeAndSys,
           success: ({ data }) => {
-            if (data.success === true) {
+            if (data.success) {
               this.detailList = []
               this.getDetailList()
             }

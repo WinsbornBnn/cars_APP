@@ -139,7 +139,7 @@ export default {
           orderstatus: this.orderStatus
         },
         success: ({ data }) => {
-          if (data.success === true) {
+          if (data.success) {
             this.orderList = data.result.records
             if (data.result.records.length < this.pageSize) {
               this.isLoadMore = true
@@ -172,7 +172,7 @@ export default {
           parameterName: this.inputValue
         },
         success: ({ data }) => {
-          if (data.success === true) {
+          if (data.success) {
             this.orderList = data.result.records
           } else {
             uni.showToast({

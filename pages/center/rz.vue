@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<cu-custom bgColor="bg-blue-one" :isBack="true" :isR="false">
+		<cu-custom bgColor="bg-blue-one" :isBackTo="true">
 			<block slot="content">用户认证</block>
 		</cu-custom>
 		<form @submit="formSubmit">
@@ -42,7 +42,7 @@
 			</view>
 			<view class="cu-form-group">
 				<view class="title">手机号</view>
-				<input style="padding-left: 45px;" name="input" v-model="TellNum"></input>
+				<input style="padding-left: 45px;" name="input" v-model="TellNum" maxlength="11"></input>
 			</view>
 			<view class="padding flex flex-direction" style="padding-top: 80upx;">
 				<button class="cu-btn bg-blue-one lg" form-type="submit">提交</button>
@@ -66,11 +66,25 @@ export default {
       PlateNum: '',
       vehicleNum: '',
       TellNum: '',
-      userId: util.readUserData().id
+      userId: util.readUserData().id,
+      deviceId: null
     }
   },
   onLoad () {
-    that = this
+    that = this;
+    uni.getSystemInfo({
+      success: function (res) {
+        // console.log(res.model);
+        // console.log(res.pixelRatio);
+        // console.log(res.windowWidth);
+        // console.log(res.windowHeight);
+        // console.log(res.language);
+        // console.log(res.version);
+        // console.log(res.platform);
+        // console.log(res.deviceId);
+        that.deviceId = res.deviceId
+      }
+    });
   },
   methods: {
     formSubmit () {
@@ -81,7 +95,8 @@ export default {
         idcard: this.Idcard,
         name: this.username,
         phone: this.TellNum,
-        sid: this.userId
+        sid: this.userId,
+        hardwarecode: that.deviceId
       }
       if (this.username === '' ||
         this.Idcard === '' ||
@@ -106,12 +121,15 @@ export default {
             method: 'post',
             data: sysAuthentication,
             success: ({ data }) => {
-              if (data.success === true) {
+              if (data.success) {
+                var userInfo = util.readUserData();
+                userInfo.thirdType = '1';
+                util.saveUserData(userInfo);
                 setTimeout(() => {
-                uni.reLaunch({
-                  url: '/pages/center/index'
-                });
-              }, 2000);
+                  uni.reLaunch({
+                    url: '/pages/center/index'
+                  });
+                }, 2000);
               } else {
                 uni.showToast({
                   icon: 'none',
@@ -152,7 +170,7 @@ export default {
                   images: uploadUrl
                 },
                 success: ({ data }) => {
-                  if (data.success === true) {
+                  if (data.success) {
                     that.username = data.result.name
                     that.Idcard = data.result.idNumber
                   } else {
@@ -199,7 +217,7 @@ export default {
                   images: uploadUrl
                 },
                 success: ({ data }) => {
-                  if (data.success === true) {
+                  if (data.success) {
                     uni.showToast({
                       icon: 'success',
                       position: 'center',
@@ -251,7 +269,7 @@ export default {
                 success: ({ data }) => {
                   that.PlateNum = data.result.plateNumber
                   that.vehicleNum = data.result.carNumber
-                  if (data.success === true) {
+                  if (data.success) {
                     uni.showToast({
                       icon: 'success',
                       position: 'center',
@@ -271,7 +289,22 @@ export default {
         }
       });
     }
-  }
+  },
+  mounted() {
+    var thirdType = util.readUserData().thirdType
+    if (thirdType === '1') {
+      uni.showToast({
+        duration: 2000,
+        icon: 'none',
+        title: '您已认证过了！'
+      });
+      setTimeout(() => {
+        uni.reLaunch({
+          url: '/pages/center/index'
+        });
+      }, 500);
+    }
+  },
 }
 </script>
 

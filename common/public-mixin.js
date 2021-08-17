@@ -19,6 +19,17 @@ export const ListMoreDataMixin = {
     });
   },
   methods: {
+    // 是否被认证
+    isThirdType () {
+      var isThirdType = util.readUserData().thirdType;
+      var result = false;
+      if (isThirdType === '1') {
+        result = true;
+        return result;
+      } else {
+        return result;
+      }
+    },
     // 订单
     getOrderList () {
       util.myRequest({
@@ -31,7 +42,7 @@ export const ListMoreDataMixin = {
           carno: util.getcarInfo().id
         },
         success: ({ data }) => {
-          if (data.success === true) {
+          if (data.success) {
             this.orderList = data.result.records
             // data.result.records.forEach(item => {
             //   for (let i = 0; i < 7; i++) {
@@ -67,7 +78,7 @@ export const ListMoreDataMixin = {
           carno: util.getcarInfo().id
         },
         success: ({ data }) => {
-          if (data.success === true) {
+          if (data.success) {
             this.orderList = data.result.records
           } else {
             uni.showToast({
@@ -90,7 +101,7 @@ export const ListMoreDataMixin = {
           pageSize: this.pageSize
         },
         success: ({ data }) => {
-          if (data.success === true) {
+          if (data.success) {
             let newimage, newCarList = []
             data.result.records.forEach(item => {
               newimage = item.imgs.split(',')
@@ -137,7 +148,7 @@ export const ListMoreDataMixin = {
           pageSize: this.pageSize
         },
         success: ({ data }) => {
-          if (data.success === true) {
+          if (data.success) {
             let newimage, newFoodList = []
             data.result.records.forEach(item => {
               newimage = item.imgs.split(',')
@@ -179,7 +190,7 @@ export const ListMoreDataMixin = {
           pageSize: this.pageSize
         },
         success: ({ data }) => {
-          if (data.success === true) {
+          if (data.success) {
             let newimage, newWorkList = []
             data.result.records.forEach(item => {
               newimage = item.imgs.split(',')
@@ -244,7 +255,7 @@ export const ListMoreDataMixin = {
         method: 'get',
         data: queryInfo,
         success: ({ data }) => {
-          if (data.success === true) {
+          if (data.success) {
             let newimage, newProductList = []
             data.result.records.forEach(item => {
               newimage = item.imgs ? item.imgs.split(',') : ''
@@ -291,7 +302,7 @@ export const ListMoreDataMixin = {
         success: ({
           data
         }) => {
-          if (data.success === true) {
+          if (data.success) {
             this.annountCementList = data.result.records
           } else {
             uni.showToast({
@@ -311,7 +322,7 @@ export const ListMoreDataMixin = {
         success: ({
           data
         }) => {
-          if (data.success === true) {
+          if (data.success) {
             const newLineUpInfoList = Object.assign(data.result)
             const LineUpInfoList = []
             for (const key in newLineUpInfoList) {
@@ -333,7 +344,7 @@ export const ListMoreDataMixin = {
     }
     // todo: 公告查看之后的操作，待完善
   },
-  watch:{
-    
+  watch: {
+
   }
 }

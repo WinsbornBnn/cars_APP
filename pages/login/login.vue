@@ -30,7 +30,7 @@
 				<view>
 					<view class="login-input">
 						<image src="../../static/yx-login/user.png"></image>
-						<input type="number" placeholder="请输入账号" maxlength="11" v-model="From.UserName"
+						<input type="text" placeholder="请输入手机号或车牌号" maxlength="11" v-model="From.UserName"
 							placeholder-style="color:#C6C5CA" />
 					</view>
 				</view>
@@ -99,6 +99,9 @@ export default {
       }
     })
   },
+  onLoad () {
+    this.nameChange()
+  },
   methods: {
     // 选择司机或者供应商
     nameChange () {
@@ -115,14 +118,25 @@ export default {
                 'content-type': 'application/json,charset=utf-8'
               },
               success: ({ data }) => {
-                console.log(data);
                 this.serverList = data
                 data.forEach(item => {
                   this.childList.push(item.name)
                 })
-              }
+                setTimeout(() => {
+                  this.childChange()
+                }, 1000);
+              },
+              fail: (err => {
+                setTimeout(() => {
+                  uni.showToast({
+                    icon: 'none',
+                    position: 'center',
+                    title: '连接服务器失败？'
+                  });
+                }, 1500);
+              })
             });
-            this.From.UserName = '13577777777'
+            this.From.UserName = '川A12345'
             this.From.PassWord = '123456'
             // this.From.UserName = ''
             // this.From.PassWord = ''
@@ -133,11 +147,11 @@ export default {
                 'content-type': 'application/json,charset=utf-8'
               },
               success: ({ data }) => {
-                console.log(data);
                 this.serverList = data
                 data.forEach(item => {
                   this.childList.push(item.name)
                 })
+                this.childChange()
               }
             });
             this.childList = []
@@ -176,6 +190,33 @@ export default {
     /* 
     登录逻辑部分
      */
+    isUserName () {
+      if (this.From.UserName.length === 7) {
+        return this.isVehicleNumber(this.From.UserName)
+      } else if (this.From.UserName.length === 11) {
+        return this.phoneFun(this.From.UserName)
+      } else {
+        return false
+      }
+    },
+    // 判断是否为车牌号
+    isVehicleNumber (vehicleNumber) {
+      var result = false;
+      if (vehicleNumber.length == 7) {
+        var express = /^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/;
+        result = express.test(vehicleNumber);
+      }
+      return result;
+    },
+    // 判断是否为手机号
+    phoneFun (phones) {
+      var result = false;
+      if (phones.length == 11) {
+        var myreg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/;
+        result = myreg.test(phones)
+      }
+      return result;
+    },
     login () {
       var that = this
       switch (that.driverName) {
@@ -194,57 +235,72 @@ export default {
           } else {
             // 验证账号密码
             if (that.From.UserName && that.From.PassWord) {
-              util.myRequest({
-                method: 'post',
-                url: '/sys/login',
-                data: driverinfo,
-                success: ({
-                  data
-                }) => {
-                  if (data.success === true) {
-                    util.setToken(data.result.token)
-                    util.saveUserData(data.result.userInfo)
-                    util.myRequest({
-                      method: 'get',
-                      url: '/carinfo/carinfo/getMyCar',
-                      data: {
-                        id: util.getUserId()
-                      },
-                      success: ({ data }) => {
-                        const itemList = []
-                        data.result.forEach(item => {
-                          itemList.push(item.carno)
-                        });
-                        uni.showActionSheet({
-                          itemList,
-                          success: (res) => {
-                            /* 验证成功跳转目标页面 */
-                            util.setcarInfo(data.result[res.tapIndex])
-                            setTimeout(() => {
-                              // uni.showToast({
-                              //   icon: 'success',
-                              //   position: 'center',
-                              //   title: data.message
-                              // });
-                              uni.reLaunch({
-                                url: '/pages/relea/index'
-                              });
-                            }, 500)
+              // 校验手机号或车牌号格式
+              if (this.isUserName()) {
+                util.myRequest({
+                  method: 'post',
+                  url: '/sys/login',
+                  data: driverinfo,
+                  success: ({
+                    data
+                  }) => {
+                    if (!data.result.isCarno) {
+                      util.setToken(data.result.token)
+                      util.saveUserData(data.result.userInfo)
+                      // 获取车牌号列表
+                      util.myRequest({
+                        method: 'get',
+                        url: '/carinfo/carinfo/getMyCar',
+                        data: {
+                          id: util.getUserId()
+                        },
+                        success: ({ data }) => {
+                          if (data.success) {
+                            const itemList = []
+                            data.result.forEach(item => {
+                              itemList.push(item.carno)
+                            });
+                            // 填充车牌号列表
+                            uni.showActionSheet({
+                              itemList,
+                              success: (res) => {
+                                /* 验证成功跳转目标页面 */
+                                util.setcarInfo(data.result[res.tapIndex])
+                                setTimeout(() => {
+                                  uni.reLaunch({
+                                    url: '/pages/index/index'
+                                  });
+                                }, 500)
+                              }
+                            })
+                          } else {
+                            uni.showToast({
+                              icon: 'none',
+                              position: 'bottom',
+                              title: data.message
+                            });
                           }
-                        })
-                      }
-                    })
-
-
-                  } else {
-                    uni.showToast({
-                      icon: 'none',
-                      position: 'bottom',
-                      title: data.message
-                    });
+                        }
+                      })
+                    } else {
+                      util.setToken(data.result.token);
+                      util.saveUserData(data.result.userInfo);
+                      util.setcarInfo(data.result.carInfo);
+                      setTimeout(() => {
+                        uni.reLaunch({
+                          url: '/pages/index/index'
+                        });
+                      }, 500)
+                    }
                   }
-                }
-              })
+                })
+              } else {
+                uni.showToast({
+                  icon: 'none',
+                  position: 'bottom',
+                  title: '手机号或车牌号格式不对？'
+                });
+              }
             } else {
               uni.showToast({
                 icon: 'none',
@@ -267,7 +323,7 @@ export default {
               success: ({
                 data
               }) => {
-                if (data.success === true) {
+                if (data.success) {
                   util.setToken(data.result.token)
                   util.saveUserData(data.result.userInfo)
                   /* 验证成功跳转目标页面 */

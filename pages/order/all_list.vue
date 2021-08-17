@@ -278,7 +278,7 @@ export default {
           supplierId: util.getUserId()
         },
         success: ({ data }) => {
-          if (data.success === true) {
+          if (data.success) {
             this.fourTotal = Object.assign(data.result)
           } else {
             uni.showToast({
@@ -296,7 +296,7 @@ export default {
         method: 'get',
         success: ({ data }) => {
           console.log(data);
-          if (data.success === true) {
+          if (data.success) {
             const newSwiperList = []
             data.result.records.forEach(item => {
               if (item.picturetwo === '订单') {

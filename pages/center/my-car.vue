@@ -82,7 +82,7 @@ export default {
         },
         success: ({ data }) => {
           console.log(data);
-          if (data.success === true) {
+          if (data.success) {
             this.myCarInfo = data.result
           } else {
             uni.showToast({

@@ -1,6 +1,7 @@
 const getSysUrl = () => {
 	//return "https://zzdw.scduke.com/ele-seal/";
-	return uni.getStorageSync("global.sysUrl");
+  return "http://192.168.2.3:8080/cvas";
+	// return uni.getStorageSync("global.sysUrl");
 }
 
 const setSysUrl = (sysUrl) => {
@@ -9,9 +10,9 @@ const setSysUrl = (sysUrl) => {
 
 const getSysImgUrl = () => {
 	//return "https://zzdw.scduke.com/ele-seal/";  
-	//return "http://192.168.2.38:8080/cvas/sys/common/static/";
+	return "http://192.168.2.3:8080/cvas/sys/common/static/";
 	//return "https://zzdw.scduke.com/ele-seal/sys/common/view/"; 
-  return uni.getStorageSync("global.sysUrl")+"/sys/common/static/";
+  // return uni.getStorageSync("global.sysUrl")+"/sys/common/static/";
 }
 
 const setSysImgUrl = (sysImgUrl) => {

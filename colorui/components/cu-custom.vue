@@ -10,7 +10,11 @@
           <text class="cuIcon-back"></text>
           <slot name="backText"></slot>
         </view>
-        <view class="action" v-if="isR"> </view>
+        <view class="action" @tap="navBackTo" v-if="isBackTo">
+          <text class="cuIcon-back"></text>
+          <slot name="backText"></slot>
+        </view>
+        <view class="action" v-if="isR"></view>
 
         <view class="content" :style="[{ top: StatusBar + 'px' }]">
           <slot name="content"></slot>
@@ -30,11 +34,13 @@
 </template>
 
 <script>
+var that;
 export default {
   data () {
     return {
       StatusBar: this.StatusBar,
-      CustomBar: this.CustomBar
+      CustomBar: this.CustomBar,
+      backType: ''
     };
   },
   name: 'cu-custom',
@@ -59,6 +65,10 @@ export default {
       type: [Boolean, String],
       default: false
     },
+    isBackTo: {
+      type: [Boolean, String],
+      default: false
+    },
     isR: {
       type: [Boolean, String],
       default: false
@@ -78,7 +88,47 @@ export default {
     addressInfo: {},
     tabNav: {}
   },
+  mounted () {
+    that = this
+    uni.$on('thridType', (data) => {
+      that.backType = data
+    });
+  },
   methods: {
+    navBackTo () {
+      uni.showModal({
+        title: '提示',
+        content: '确定取消认证吗？',
+        success: function (res) {
+          if (res.confirm) {
+            setTimeout(() => {
+              switch (that.backType) {
+                case 'order':
+                  uni.reLaunch({
+                    url: '/pages/center/index'
+                  });
+                  break;
+                case 'relea':
+                  uni.reLaunch({
+                    url: '/pages/center/index'
+                  });
+                  break;
+                case 'shop':
+                  uni.reLaunch({
+                    url: '/pages/center/index'
+                  });
+                  break;
+
+                default:
+                  break;
+              }
+            }, 1000)
+          } else if (res.cancel) {
+            return
+          }
+        }
+      });
+    },
     BackPage () {
       uni.navigateBack({
         delta: 1

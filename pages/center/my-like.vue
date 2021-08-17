@@ -72,7 +72,7 @@ export default {
         },
         success: ({ data }) => {
           console.log(data,'74');
-          if (data.success === true) {
+          if (data.success) {
             let newimage, newFoodList = []
             data.result.forEach(item => {
               newimage = item.release.imgs.split(',')

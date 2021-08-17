@@ -73,7 +73,7 @@ export default {
           supplierId: util.getUserId()
         },
         success: ({ data }) => {
-          if (data.success === true) {
+          if (data.success) {
             data.result.forEach(item => {
               this.markers.push({
                 latitude: item.lat,

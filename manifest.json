@@ -6,6 +6,7 @@
     "versionCode" : 214,
     "transformPx" : false,
     "app-plus" : {
+        // "nvueCompiler":"uni-app",//是否启用 weex 模式  
         /* 5+App特有相关 */
         "modules" : {
             "Maps" : {},
@@ -144,6 +145,13 @@
         "optimization" : {
             "treeShaking" : {
                 "enable" : false
+            }
+        },
+        "sdkConfigs" : {
+            "maps" : {
+                "qqmap" : {
+                    "key" : "RGBBZ-HGM6J-A2CFR-KAKGN-ZFQDT-VKBN5"
+                }
             }
         }
     }
