@@ -30,7 +30,7 @@
 				<view>
 					<view class="login-input">
 						<image src="../../static/yx-login/user.png"></image>
-						<input type="text" placeholder="请输入手机号或车牌号" maxlength="11" v-model="From.UserName"
+						<input type="text" :placeholder="usernamePlaceholder" maxlength="11" v-model="From.UserName"
 							placeholder-style="color:#C6C5CA" />
 					</view>
 				</view>
@@ -39,8 +39,8 @@
 						<image src="../../static/yx-login/password.png"></image>
 						<input type="password" placeholder="请输入密码" maxlength="16" v-model="From.PassWord"
 							placeholder-style="color:#C6C5CA" v-if="SwiTch" />
-						<input type="text" placeholder="请输入密码" maxlength="16" placeholder-style="color:#C6C5CA" v-model="From.PassWord"
-							v-else />
+						<input type="text" placeholder="请输入密码" maxlength="16" placeholder-style="color:#C6C5CA"
+							v-model="From.PassWord" v-else />
 						<image src="../../static/yx-login/b_yanjing.png" class="switch" @click="Switch()" v-if="SwiTch">
 						</image>
 
@@ -75,6 +75,7 @@ export default {
     return {
       driverName: '司机',
       childName: '服务器1',
+      usernamePlaceholder: '请输入手机号或车牌号',
       carnoList: '',
       childList: [],
       multiIndex: [0, 0],
@@ -85,7 +86,8 @@ export default {
       checked: false, //单选框
       SwiTch: true,
       serverList: [],
-      carnoList: []
+      carnoList: [],
+      serverUrl: 'http://39.100.243.114:8088/cvas/sys/common/static/download/server.json'
     }
   },
   // 读取本地存储密码及账号
@@ -113,11 +115,13 @@ export default {
           if (res.tapIndex === 0) {
             this.childList = []
             uni.request({
-              url: 'http://39.100.243.114:8088/cvas/sys/common/static/download/server.json',
+              url: this.serverUrl,
               header: {
                 'content-type': 'application/json,charset=utf-8'
               },
-              success: ({ data }) => {
+              success: ({
+                data
+              }) => {
                 this.serverList = data
                 data.forEach(item => {
                   this.childList.push(item.name)
@@ -136,27 +140,40 @@ export default {
                 }, 1500);
               })
             });
-            this.From.UserName = '川A12345'
-            this.From.PassWord = '123456'
+            this.usernamePlaceholder = '请输入手机号或车牌号'
+            // this.From.UserName = '川A12345'
+            // this.From.PassWord = '123456'
             // this.From.UserName = ''
             // this.From.PassWord = ''
           } else {
             uni.request({
-              url: 'http://39.100.243.114:8088/cvas/sys/common/static/download/server.json',
+              url: this.serverUrl,
               header: {
                 'content-type': 'application/json,charset=utf-8'
               },
-              success: ({ data }) => {
+              success: ({
+                data
+              }) => {
                 this.serverList = data
                 data.forEach(item => {
                   this.childList.push(item.name)
                 })
                 this.childChange()
-              }
+              },
+              fail: (err => {
+                setTimeout(() => {
+                  uni.showToast({
+                    icon: 'none',
+                    position: 'center',
+                    title: '连接服务器失败？'
+                  });
+                }, 1500);
+              })
             });
             this.childList = []
-            this.From.UserName = '15566666666'
-            this.From.PassWord = '159456'
+            this.usernamePlaceholder = '请输入用户名'
+            // this.From.UserName = '15566666666'
+            // this.From.PassWord = '159456'
             // this.From.UserName = ''
             // this.From.PassWord = ''
           }
@@ -254,7 +271,9 @@ export default {
                         data: {
                           id: util.getUserId()
                         },
-                        success: ({ data }) => {
+                        success: ({
+                          data
+                        }) => {
                           if (data.success) {
                             const itemList = []
                             data.result.forEach(item => {
@@ -265,7 +284,11 @@ export default {
                               itemList,
                               success: (res) => {
                                 /* 验证成功跳转目标页面 */
-                                util.setcarInfo(data.result[res.tapIndex])
+                                util.setcarInfo(
+                                  data
+                                    .result[res
+                                    .tapIndex
+                                  ])
                                 setTimeout(() => {
                                   uni.reLaunch({
                                     url: '/pages/index/index'
